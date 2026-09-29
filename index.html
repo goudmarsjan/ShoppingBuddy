@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShoppingBuddy</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --purple: #6c4cff;
+    --purple-dark: #5138d6;
+    --pink: #ff6fae;
+    --bg: #f7f7fb;
+    --card: #ffffff;
+    --text: #20202a;
+    --muted: #777783;
+    --border: #e8e8ef;
+    --green: #36b37e;
+    --red: #e55353;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+/* HEADER */
+
+header {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.header-inner {
+    max-width: 1100px;
+    margin: auto;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 21px;
+}
+
+nav {
+    display: flex;
+    gap: 5px;
+}
+
+nav button {
+    background: transparent;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: var(--muted);
+}
+
+nav button:hover,
+nav button.active {
+    background: #f0edff;
+    color: var(--purple);
+}
+
+/* MAIN */
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 30px 20px 100px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* HOME */
+
+.hero {
+    background: linear-gradient(135deg, #6c4cff, #8c67ff);
+    color: white;
+    border-radius: 28px;
+    padding: 45px;
+    margin-bottom: 30px;
+}
+
+.hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    margin-bottom: 15px;
+}
+
+.hero p {
+    max-width: 650px;
+    font-size: 18px;
+    line-height: 1.6;
+    opacity: .95;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.btn {
+    padding: 13px 19px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: var(--purple);
+    color: white;
+}
+
+.btn-white {
+    background: white;
+    color: var(--purple);
+}
+
+.btn-danger {
+    background: #fff0f0;
+    color: var(--red);
+}
+
+.btn-success {
+    background: #eaf9f2;
+    color: var(--green);
+}
+
+.btn-small {
+    padding: 9px 12px;
+    font-size: 14px;
+}
+
+/* SECTIONS */
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.section-title h2 {
+    font-size: 24px;
+}
+
+/* CARDS */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(30,30,60,.04);
+}
+
+.activity-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.activity-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: #f0edff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.activity-card h3 {
+    font-size: 20px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.activity-description {
+    line-height: 1.5;
+    color: #555562;
+}
+
+.tags {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background: #f1f1f6;
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+}
+
+/* FORMS */
+
+.form-card {
+    max-width: 720px;
+    margin: auto;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: white;
+    outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--purple);
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.checkbox-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.checkbox {
+    background: #f3f3f7;
+    padding: 10px 13px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.checkbox input {
+    width: auto;
+    margin-right: 5px;
+}
+
+/* PROFILE */
+
+.profile-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.verification {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.verified {
+    background: #eaf9f2;
+    color: var(--green);
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+/* REQUESTS */
+
+.request {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.request:last-child {
+    border-bottom: none;
+}
+
+.request-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #eeeaff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--purple);
+}
+
+.request-info {
+    flex: 1;
+}
+
+.request-actions {
+    display: flex;
+    gap: 7px;
+}
+
+/* CHAT */
+
+.chat-container {
+    max-width: 720px;
+    margin: auto;
+}
+
+.chat-header {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px 18px 0 0;
+    padding: 20px;
+}
+
+.messages {
+    background: #f0f0f6;
+    min-height: 430px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 11px 14px;
+    border-radius: 15px;
+    background: white;
+    align-self: flex-start;
+}
+
+.message.me {
+    align-self: flex-end;
+    background: var(--purple);
+    color: white;
+}
+
+.message-name {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.chat-input {
+    background: white;
+    padding: 15px;
+    border-radius: 0 0 18px 18px;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+}
+
+/* EMPTY */
+
+.empty {
+    text-align: center;
+    padding: 45px 20px;
+    color: var(--muted);
+}
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    nav button span {
+        display: none;
+    }
+
+    .hero {
+        padding: 30px;
+    }
+}
+
+@media (max-width: 560px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding: 20px 14px 100px;
+    }
+
+    .hero {
+        border-radius: 20px;
+        padding: 25px;
+    }
+
+    .profile-top {
+        align-items: flex-start;
+    }
+
+    .request {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .request-actions {
+        width: 100%;
+        margin-left: 65px;
+    }
+
+    nav {
+        gap: 0;
+    }
+
+    nav button {
+        padding: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <div class="logo">
+            <div class="logo-icon">🛍️</div>
+            ShoppingBuddy
+        </div>
+
+        <nav>
+            <button onclick="showPage('home')" class="active">🏠 <span>Home</span></button>
+            <button onclick="showPage('search')">🔎 <span>Zoeken</span></button>
+            <button onclick="showPage('create')">➕ <span>Aanmaken</span></button>
+            <button onclick="showPage('chat')">💬 <span>Chat</span></button>
+            <button onclick="showPage('profile')">👤 <span>Profiel</span></button>
+        </nav>
+
+    </div>
+</header>
+
+
+<main>
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+    <div class="hero">
+
+        <h1>Niemand om mee te gaan?</h1>
+
+        <p>
+            Vind iemand die samen met jou wil shoppen,
+            koffie drinken, naar de cinema gaan of gewoon
+            iets leuks wil doen.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="btn btn-white" onclick="showPage('search')">
+                🔎 Activiteiten zoeken
+            </button>
+
+            <button class="btn btn-white" onclick="showPage('create')">
+                ➕ Activiteit aanmaken
+            </button>
+        </div>
+
+    </div>
+
+
+    <div class="section-title">
+        <h2>Activiteiten bij jou in de buurt</h2>
+        <button class="btn btn-primary btn-small" onclick="showPage('search')">
+            Alles bekijken
+        </button>
+    </div>
+
+    <div id="homeActivities" class="grid"></div>
+
+</section>
+
+
+<!-- SEARCH -->
+
+<section id="search" class="page">
+
+    <div class="section-title">
+        <h2>🔎 Activiteiten zoeken</h2>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+
+        <div class="form-group">
+            <label>Waar wil je naartoe?</label>
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="bv. Wijnegem, Gent, Aalst..."
+                oninput="renderActivities()"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Wat wil je doen?</label>
+
+            <select id="categoryFilter" onchange="renderActivities()">
+                <option value="">Alles</option>
+                <option value="Shoppen">🛍️ Shoppen</option>
+                <option value="Koffie">☕ Koffie</option>
+                <option value="Cinema">🎬 Cinema</option>
+                <option value="Eten">🍔 Eten</option>
+                <option value="Sport">🏋️ Sport</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div id="activitiesGrid" class="grid"></div>
+
+</section>
+
+
+<!-- CREATE -->
+
+<section id="create" class="page">
+
+    <div class="section-title">
+        <h2>➕ Activiteit aanmaken</h2>
+    </div>
+
+    <div class="card form-card">
+
+        <div class="form-group">
+            <label>Waar wil je naartoe?</label>
+            <input id="newLocation" placeholder="bv. Wijnegem Shopping">
+        </div>
+
+        <div class="form-group">
+            <label>Datum</label>
+            <input id="newDate" type="date">
+        </div>
+
+        <div class="form-group">
+            <label>Uur</label>
+            <input id="newTime" type="time">
+        </div>
+
+        <div class="form-group">
+            <label>Wat wil je doen?</label>
+
+            <div class="checkbox-grid">
+
+                <label class="checkbox">
+                    <input type="checkbox" value="Shoppen" class="newCategory">
+                    🛍️ Shoppen
+                </label>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="Koffie" class="newCategory">
+                    ☕ Koffie
+                </label>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="Cinema" class="newCategory">
+                    🎬 Cinema
+                </label>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="Eten" class="newCategory">
+                    🍔 Eten
+                </label>
+
+                <label class="checkbox">
+                    <input type="checkbox" value="Sport" class="newCategory">
+                    🏋️ Sport
+                </label>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Hoeveel mensen mogen mee?</label>
+            <select id="newSlots">
+                <option value="1">1 persoon</option>
+                <option value="2" selected>2 personen</option>
+                <option value="3">3 personen</option>
+                <option value="4">4 personen</option>
+                <option value="5">5 personen</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Extra informatie</label>
+            <textarea
+                id="newDescription"
+                placeholder="Vertel kort wat je van plan bent..."
+            ></textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="createActivity()">
+            🛍️ Activiteit plaatsen
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="profile" class="page">
+
+    <div class="card">
+
+        <div class="profile-top">
+
+            <div class="avatar">S</div>
+
+            <div>
+                <h1>Sarah, 24</h1>
+                <p class="muted">📍 Aalst</p>
+
+                <div class="verification">
+                    <span class="verified">✓ E-mail bevestigd</span>
+                    <span class="verified">✓ Telefoon bevestigd</span>
+                </div>
+            </div>
+
+        </div>
+
+        <h3>Over mij</h3>
+
+        <p class="activity-description" style="margin-top:8px">
+            Ik ga graag shoppen en vind het leuk om nieuwe mensen
+            te leren kennen.
+        </p>
+
+    </div>
+
+
+    <div class="grid" style="margin-top:20px">
+
+        <div class="card">
+            <h2>3</h2>
+            <p class="muted">Georganiseerd</p>
+        </div>
+
+        <div class="card">
+            <h2>7</h2>
+            <p class="muted">Keer meegegaan</p>
+        </div>
+
+        <div class="card">
+            <h2>⭐ 5.0</h2>
+            <p class="muted">Beoordeling</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- REQUESTS -->
+
+<section id="requests" class="page">
+
+    <div class="section-title">
+        <h2>👥 Aanvragen beheren</h2>
+    </div>
+
+    <div class="card">
+
+        <h2>🛍️ Wijnegem Shopping</h2>
+
+        <p class="muted" style="margin-top:5px">
+            Zaterdag · 14:00 · nog 2 plaatsen
+        </p>
+
+        <div id="requestsList"></div>
+
+    </div>
+
+</section>
+
+
+<!-- CHAT -->
+
+<section id="chat" class="page">
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+
+            <h2>🛍️ Wijnegem Shopping</h2>
+
+            <p class="muted">
+                Zaterdag · 14:00 · Wijnegem
+            </p>
+
+        </div>
+
+        <div id="messages" class="messages">
+
+            <div class="message">
+                <div class="message-name">Sarah</div>
+                Zullen we om 14u aan de hoofdingang afspreken?
+            </div>
+
+            <div class="message">
+                <div class="message-name">Lisa</div>
+                Ja perfect 😊
+            </div>
+
+            <div class="message me">
+                <div class="message-name">Jij</div>
+                Voor mij ook!
+            </div>
+
+        </div>
+
+        <div class="chat-input">
+
+            <input
+                id="messageInput"
+                placeholder="Typ een bericht..."
+                onkeydown="if(event.key==='Enter') sendMessage()"
+            >
+
+            <button class="btn btn-primary" onclick="sendMessage()">
+                Verstuur
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<script>
+
+let activities = [
+
+    {
+        id: 1,
+        location: "Wijnegem Shopping",
+        date: "2026-10-03",
+        time: "14:00",
+        categories: ["Shoppen", "Koffie"],
+        person: "Sarah",
+        age: 24,
+        slots: 2,
+        description: "Ik wil vooral kledingwinkels doen en daarna iets drinken."
+    },
+
+    {
+        id: 2,
+        location: "Gent Zuid",
+        date: "2026-10-03",
+        time: "13:30",
+        categories: ["Shoppen"],
+        person: "Jonas",
+        age: 27,
+        slots: 1,
+        description: "Gewoon gezellig samen shoppen."
+    },
+
+    {
+        id: 3,
+        location: "Aalst",
+        date: "2026-10-04",
+        time: "15:00",
+        categories: ["Koffie"],
+        person: "Emma",
+        age: 25,
+        slots: 2,
+        description: "Samen koffie drinken en wat bijpraten."
+    }
+
+];
+
+
+let requests = [
+
+    {
+        id: 1,
+        name: "Lisa",
+        age: 23,
+        location: "Aalst",
+        message: "Lijkt me gezellig!"
+    },
+
+    {
+        id: 2,
+        name: "Emma",
+        age: 25,
+        location: "Dendermonde",
+        message: "Ik zou graag meegaan."
+    },
+
+    {
+        id: 3,
+        name: "Tom",
+        age: 29,
+        location: "Gent",
+        message: "Ik ben zaterdag beschikbaar."
+    }
+
+];
+
+
+function showPage(pageId) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    const page = document.getElementById(pageId);
+
+    if(page) {
+        page.classList.add("active");
+    }
+
+    document.querySelectorAll("nav button").forEach(button => {
+        button.classList.remove("active");
+    });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+    if(pageId === "search") {
+        renderActivities();
+    }
+
+    if(pageId === "home") {
+        renderHomeActivities();
+    }
+
+    if(pageId === "requests") {
+        renderRequests();
+    }
+
+}
+
+
+function formatDate(date) {
+
+    if(!date) return "";
+
+    const d = new Date(date + "T00:00:00");
+
+    return d.toLocaleDateString("nl-BE", {
+        weekday: "short",
+        day: "numeric",
+        month: "long"
+    });
+
+}
+
+
+function categoryIcon(categories) {
+
+    if(categories.includes("Shoppen")) return "🛍️";
+    if(categories.includes("Koffie")) return "☕";
+    if(categories.includes("Cinema")) return "🎬";
+    if(categories.includes("Eten")) return "🍔";
+    if(categories.includes("Sport")) return "🏋️";
+
+    return "✨";
+}
+
+
+function activityHTML(activity) {
+
+    return `
+
+        <div class="card activity-card">
+
+            <div class="activity-icon">
+                ${categoryIcon(activity.categories)}
+            </div>
+
+            <div>
+
+                <h3>${activity.location}</h3>
+
+                <p class="muted">
+                    📅 ${formatDate(activity.date)}
+                    · 🕐 ${activity.time}
+                </p>
+
+            </div>
+
+            <div class="tags">
+
+                ${activity.categories.map(category =>
+                    `<span class="tag">${category}</span>`
+                ).join("")}
+
+            </div>
+
+            <p class="activity-description">
+                ${activity.description}
+            </p>
+
+            <p class="muted">
+                👤 ${activity.person}, ${activity.age}
+                · 👥 nog ${activity.slots} plaats${activity.slots === 1 ? "" : "en"}
+            </p>
+
+            <button
+                class="btn btn-primary"
+                onclick="joinActivity(${activity.id})"
+            >
+                Ik wil mee
+            </button>
+
+        </div>
+
+    `;
+
+}
+
+
+function renderHomeActivities() {
+
+    const container = document.getElementById("homeActivities");
+
+    container.innerHTML = activities
+        .slice(0, 3)
+        .map(activityHTML)
+        .join("");
+
+}
+
+
+function renderActivities() {
+
+    const container = document.getElementById("activitiesGrid");
+
+    const search = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const category = document
+        .getElementById("categoryFilter")
+        .value;
+
+    const filtered = activities.filter(activity => {
+
+        const locationMatch =
+            activity.location.toLowerCase().includes(search);
+
+        const categoryMatch =
+            !category ||
+            activity.categories.includes(category);
+
+        return locationMatch && categoryMatch;
+
+    });
+
+
+    if(filtered.length === 0) {
+
+        container.innerHTML = `
+            <div class="card empty">
+                <h3>Geen activiteiten gevonden 😕</h3>
+                <p style="margin-top:8px">
+                    Misschien kun je zelf een activiteit aanmaken.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        filtered.map(activityHTML).join("");
+
+}
+
+
+function createActivity() {
+
+    const location =
+        document.getElementById("newLocation").value.trim();
+
+    const date =
+        document.getElementById("newDate").value;
+
+    const time =
+        document.getElementById("newTime").value;
+
+    const slots =
+        Number(document.getElementById("newSlots").value);
+
+    const description =
+        document.getElementById("newDescription").value.trim();
+
+
+    const categories =
+        [...document.querySelectorAll(".newCategory:checked")]
+        .map(input => input.value);
+
+
+    if(!location || !date || !time || categories.length === 0) {
+
+        alert("Vul minstens de locatie, datum, uur en activiteit in.");
+
+        return;
+    }
+
+
+    const newActivity = {
+
+        id: Date.now(),
+
+        location,
+
+        date,
+
+        time,
+
+        categories,
+
+        person: "Jij",
+
+        age: 24,
+
+        slots,
+
+        description:
+            description ||
+            "Nieuwe ShoppingBuddy activiteit."
+
+    };
+
+
+    activities.unshift(newActivity);
+
+
+    document.getElementById("newLocation").value = "";
+    document.getElementById("newDate").value = "";
+    document.getElementById("newTime").value = "";
+    document.getElementById("newDescription").value = "";
+
+    document.querySelectorAll(".newCategory")
+        .forEach(input => input.checked = false);
+
+
+    alert("Je activiteit is geplaatst! 🛍️");
+
+    showPage("search");
+
+}
+
+
+function joinActivity(id) {
+
+    const activity =
+        activities.find(a => a.id === id);
+
+    if(!activity) return;
+
+
+    if(activity.slots <= 0) {
+
+        alert("Deze activiteit zit al vol.");
+
+        return;
+    }
+
+
+    alert(
+        `Je aanvraag voor "${activity.location}" is verstuurd! 🙌\n\nDe organisator moet je aanvraag eerst accepteren.`
+    );
+
+}
+
+
+function renderRequests() {
+
+    const container =
+        document.getElementById("requestsList");
+
+
+    if(requests.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                Geen openstaande aanvragen.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = requests.map(request => `
+
+        <div class="request" id="request-${request.id}">
+
+            <div class="request-avatar">
+                ${request.name.charAt(0)}
+            </div>
+
+            <div class="request-info">
+
+                <strong>
+                    ${request.name}, ${request.age}
+                </strong>
+
+                <p class="muted">
+                    📍 ${request.location}
+                </p>
+
+                <p style="margin-top:5px">
+                    "${request.message}"
+                </p>
+
+            </div>
+
+            <div class="request-actions">
+
+                <button
+                    class="btn btn-success btn-small"
+                    onclick="acceptRequest(${request.id})"
+                >
+                    ✓
+                </button>
+
+                <button
+                    class="btn btn-danger btn-small"
+                    onclick="rejectRequest(${request.id})"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+function acceptRequest(id) {
+
+    const request =
+        requests.find(r => r.id === id);
+
+    if(!request) return;
+
+
+    requests =
+        requests.filter(r => r.id !== id);
+
+    renderRequests();
+
+    alert(
+        `${request.name} is toegevoegd aan je activiteit! 💬`
+    );
+
+}
+
+
+function rejectRequest(id) {
+
+    requests =
+        requests.filter(r => r.id !== id);
+
+    renderRequests();
+
+}
+
+
+function sendMessage() {
+
+    const input =
+        document.getElementById("messageInput");
+
+    const text =
+        input.value.trim();
+
+    if(!text) return;
+
+
+    const messages =
+        document.getElementById("messages");
+
+
+    messages.innerHTML += `
+
+        <div class="message me">
+
+            <div class="message-name">
+                Jij
+            </div>
+
+            ${escapeHTML(text)}
+
+        </div>
+
+    `;
+
+
+    input.value = "";
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+}
+
+
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* START */
+
+renderHomeActivities();
+
+</script>
+
+</body>
+</html>
