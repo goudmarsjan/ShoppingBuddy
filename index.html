@@ -1,2411 +1,2298 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShoppingBuddy</title>
-
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-    --purple: #6c4cff;
-    --purple-dark: #5138d6;
-    --pink: #ff6fae;
-    --bg: #f7f7fb;
-    --card: #ffffff;
-    --text: #20202a;
-    --muted: #777783;
-    --border: #e8e8ef;
-    --green: #36b37e;
-    --red: #e55353;
-    --orange: #f59e0b;
-    --blue: #3b82f6;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-}
-
-button,
-input,
-textarea,
-select {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-    border: none;
-}
-
-header {
-    background: white;
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-}
-
-.header-inner {
-    max-width: 1200px;
-    margin: auto;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 22px;
-    font-weight: 800;
-    white-space: nowrap;
-}
-
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--purple), var(--pink));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 21px;
-}
-
-nav {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-}
-
-nav button {
-    background: transparent;
-    padding: 10px 12px;
-    border-radius: 10px;
-    color: var(--muted);
-    white-space: nowrap;
-}
-
-nav button:hover,
-nav button.active {
-    background: #f0edff;
-    color: var(--purple);
-}
-
-main {
-    max-width: 1200px;
-    margin: auto;
-    padding: 28px 20px 100px;
-}
-
-.page {
-    display: none;
-}
-
-.page.active {
-    display: block;
-}
-
-/* HERO */
-
-.hero {
-    background: linear-gradient(135deg, #6c4cff, #8c67ff);
-    color: white;
-    border-radius: 28px;
-    padding: 45px;
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-}
-
-.hero:after {
-    content: "🛍️";
-    position: absolute;
-    right: 50px;
-    bottom: -20px;
-    font-size: 150px;
-    opacity: .12;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero h1 {
-    font-size: clamp(34px, 6vw, 58px);
-    margin-bottom: 15px;
-}
-
-.hero p {
-    max-width: 680px;
-    font-size: 18px;
-    line-height: 1.6;
-    opacity: .95;
-}
-
-.hero-buttons {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 25px;
-}
-
-/* BUTTONS */
-
-.btn {
-    padding: 13px 19px;
-    border-radius: 12px;
-    font-weight: 700;
-    transition: .2s;
-}
-
-.btn:hover {
-    transform: translateY(-1px);
-}
-
-.btn-primary {
-    background: var(--purple);
-    color: white;
-}
-
-.btn-white {
-    background: white;
-    color: var(--purple);
-}
-
-.btn-danger {
-    background: #fff0f0;
-    color: var(--red);
-}
-
-.btn-success {
-    background: #eaf9f2;
-    color: var(--green);
-}
-
-.btn-blue {
-    background: #edf5ff;
-    color: var(--blue);
-}
-
-.btn-small {
-    padding: 9px 12px;
-    font-size: 14px;
-}
-
-/* SEARCH BAR */
-
-.home-search {
-    background: white;
-    padding: 10px;
-    border-radius: 16px;
-    display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    border: 1px solid var(--border);
-}
-
-.home-search input {
-    border: none;
-    flex: 1;
-    padding: 12px;
-}
-
-.home-search input:focus {
-    border: none;
-}
-
-/* SECTIONS */
-
-.section {
-    margin-bottom: 35px;
-}
-
-.section-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 16px;
-}
-
-.section-title h2 {
-    font-size: 24px;
-}
-
-.section-title p {
-    color: var(--muted);
-}
-
-/* CARDS */
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-}
-
-.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: 0 5px 20px rgba(30,30,60,.04);
-}
-
-.activity-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.activity-icon {
-    width: 55px;
-    height: 55px;
-    border-radius: 16px;
-    background: #f0edff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-}
-
-.activity-card h3 {
-    font-size: 20px;
-}
-
-.activity-description {
-    line-height: 1.5;
-    color: #555562;
-}
-
-.muted {
-    color: var(--muted);
-    font-size: 14px;
-}
-
-.tags {
-    display: flex;
-    gap: 7px;
-    flex-wrap: wrap;
-}
-
-.tag {
-    background: #f1f1f6;
-    padding: 6px 9px;
-    border-radius: 999px;
-    font-size: 12px;
-}
-
-.tag-purple {
-    background: #eeeaff;
-    color: var(--purple);
-}
-
-.tag-green {
-    background: #eaf9f2;
-    color: var(--green);
-}
-
-.tag-blue {
-    background: #edf5ff;
-    color: var(--blue);
-}
-
-/* HOME CATEGORY */
-
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 12px;
-}
-
-.category {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 17px 8px;
-    text-align: center;
-    transition: .2s;
-    cursor: pointer;
-}
-
-.category:hover {
-    transform: translateY(-3px);
-    border-color: var(--purple);
-}
-
-.category-icon {
-    font-size: 27px;
-    margin-bottom: 7px;
-}
-
-.category span {
-    font-size: 12px;
-    font-weight: 700;
-}
-
-/* FORM */
-
-.form-card {
-    max-width: 720px;
-    margin: auto;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 7px;
-}
-
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid var(--border);
-    border-radius: 11px;
-    background: white;
-    outline: none;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: var(--purple);
-}
-
-textarea {
-    min-height: 110px;
-    resize: vertical;
-}
-
-.checkbox-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-}
-
-.checkbox {
-    background: #f3f3f7;
-    padding: 10px 13px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.checkbox input {
-    width: auto;
-    margin-right: 5px;
-}
-
-/* PROFILE */
-
-.profile-header {
-    background: linear-gradient(135deg, #6c4cff, #8c67ff);
-    color: white;
-    border-radius: 25px;
-    padding: 30px;
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    margin-bottom: 20px;
-}
-
-.avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffffff, #eeeaff);
-    color: var(--purple);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 38px;
-    font-weight: bold;
-    flex-shrink: 0;
-}
-
-.profile-header .muted {
-    color: rgba(255,255,255,.85);
-}
-
-.verification {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 12px;
-}
-
-.verified {
-    background: rgba(255,255,255,.18);
-    padding: 7px 10px;
-    border-radius: 999px;
-    font-size: 13px;
-}
-
-.profile-stats {
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.stat {
-    text-align: center;
-}
-
-.stat h2 {
-    font-size: 27px;
-}
-
-.reliability {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.progress {
-    background: #eeeeF4;
-    height: 10px;
-    border-radius: 999px;
-    overflow: hidden;
-    margin-top: 8px;
-}
-
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, var(--purple), var(--pink));
-    border-radius: 999px;
-}
-
-.badges {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.badge {
-    padding: 10px 13px;
-    border-radius: 12px;
-    background: #f5f3ff;
-    color: var(--purple);
-    font-size: 13px;
-    font-weight: 700;
-}
-
-/* ACTIVITY DETAIL */
-
-.detail-header {
-    background: linear-gradient(135deg, #6c4cff, #8c67ff);
-    color: white;
-    border-radius: 25px;
-    padding: 35px;
-    margin-bottom: 20px;
-}
-
-.detail-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
-}
-
-.detail-info {
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 12px;
-    margin: 20px 0;
-}
-
-.info-box {
-    background: #f7f7fb;
-    padding: 15px;
-    border-radius: 13px;
-}
-
-.organizer {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-}
-
-.small-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #eeeaff;
-    color: var(--purple);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
-/* EVENTS */
-
-.event-banner {
-    background: linear-gradient(135deg,#111827,#374151);
-    color: white;
-    border-radius: 25px;
-    padding: 35px;
-    margin-bottom: 25px;
-}
-
-.event-card {
-    position: relative;
-    overflow: hidden;
-}
-
-.event-card-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-.event-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 17px;
-    background: #eeeaff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    margin-bottom: 15px;
-}
-
-.org-badge {
-    background: #edf5ff;
-    color: var(--blue);
-    padding: 6px 9px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.special-event {
-    border: 2px solid #eeeaff;
-}
-
-/* REQUESTS */
-
-.request {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.request:last-child {
-    border-bottom: none;
-}
-
-.request-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: #eeeaff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: var(--purple);
-}
-
-.request-info {
-    flex: 1;
-}
-
-.request-actions {
-    display: flex;
-    gap: 7px;
-}
-
-/* CHAT */
-
-.chat-container {
-    max-width: 720px;
-    margin: auto;
-}
-
-.chat-header {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 18px 18px 0 0;
-    padding: 20px;
-}
-
-.messages {
-    background: #f0f0f6;
-    min-height: 430px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.message {
-    max-width: 75%;
-    padding: 11px 14px;
-    border-radius: 15px;
-    background: white;
-    align-self: flex-start;
-}
-
-.message.me {
-    align-self: flex-end;
-    background: var(--purple);
-    color: white;
-}
-
-.message-name {
-    font-size: 11px;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.chat-input {
-    background: white;
-    padding: 15px;
-    border-radius: 0 0 18px 18px;
-    display: flex;
-    gap: 10px;
-}
-
-/* EMPTY */
-
-.empty {
-    text-align: center;
-    padding: 45px 20px;
-    color: var(--muted);
-}
-
-/* MOBILE */
-
-@media (max-width: 900px) {
-
-    .grid {
-        grid-template-columns: 1fr 1fr;
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>ShoppingBuddy</title>
+
+  <meta
+    name="description"
+    content="Ga samen. Beleef meer. Vind mensen om samen activiteiten te doen."
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    .category-grid {
-        grid-template-columns: repeat(4,1fr);
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f5f7;
+      color: #202124;
     }
 
-    .detail-layout {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 650px) {
-
-    main {
-        padding: 20px 14px 100px;
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
     }
 
-    .hero {
-        padding: 28px;
-        border-radius: 20px;
+    button {
+      cursor: pointer;
     }
 
-    .grid {
-        grid-template-columns: 1fr;
+    .hidden {
+      display: none !important;
     }
 
-    .profile-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-    .profile-stats {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .reliability {
-        grid-template-columns: 1fr;
-    }
-
-    .detail-info {
-        grid-template-columns: 1fr;
-    }
-
-    .category-grid {
-        grid-template-columns: repeat(4,1fr);
-    }
-
-    .request {
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
-
-    .request-actions {
-        width: 100%;
-        margin-left: 65px;
-    }
-
-    nav button {
-        padding: 8px;
-    }
-
-    nav button span {
-        display: none;
-    }
-
-    .header-inner {
-        padding: 12px;
+    header {
+      height: 68px;
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo {
-        font-size: 18px;
+      font-size: 22px;
+      font-weight: 800;
+      color: #6846ff;
+      cursor: pointer;
     }
-}
-</style>
+
+    nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    nav button {
+      border: none;
+      background: transparent;
+      padding: 10px 14px;
+      border-radius: 10px;
+      color: #555;
+    }
+
+    nav button:hover {
+      background: #f0edff;
+      color: #6846ff;
+    }
+
+    .nav-profile {
+      background: #6846ff !important;
+      color: white !important;
+    }
+
+    /* =====================================================
+       PAGES
+    ===================================================== */
+
+    .page {
+      display: none;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 35px 20px 80px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+
+    .hero {
+      background: linear-gradient(
+        135deg,
+        #6846ff,
+        #8c62ff
+      );
+      color: white;
+      border-radius: 28px;
+      padding: 55px 40px;
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      font-size: 46px;
+      line-height: 1.05;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      max-width: 650px;
+      line-height: 1.6;
+      opacity: .95;
+    }
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .btn {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-weight: 700;
+      transition: .15s;
+    }
+
+    .btn-primary {
+      background: #6846ff;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5635e5;
+    }
+
+    .btn-secondary {
+      background: #eee;
+      color: #333;
+    }
+
+    .btn-white {
+      background: white;
+      color: #6846ff;
+    }
+
+    .btn-danger {
+      background: #ffe8e8;
+      color: #c62828;
+    }
+
+    /* =====================================================
+       CARDS
+    ===================================================== */
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.05);
+      margin-bottom: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .activity-card {
+      cursor: pointer;
+      transition: transform .15s;
+    }
+
+    .activity-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .activity-card h3 {
+      margin: 10px 0;
+    }
+
+    .muted {
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* =====================================================
+       AUTH
+    ===================================================== */
+
+    .auth-wrapper {
+      min-height: calc(100vh - 68px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 15px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 470px;
+      background: white;
+      padding: 32px;
+      border-radius: 22px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    }
+
+    .auth-card h1 {
+      margin-bottom: 8px;
+    }
+
+    .auth-card > p {
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    /* ACCOUNT TYPE */
+
+    .account-types {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .account-type {
+      border: 2px solid #ddd;
+      border-radius: 15px;
+      padding: 18px;
+      background: white;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .account-type.active {
+      border-color: #6846ff;
+      background: #f4f1ff;
+    }
+
+    .account-type .icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .account-type strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .account-type span {
+      color: #777;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    /* =====================================================
+       FORMS
+    ===================================================== */
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #ddd;
+      border-radius: 11px;
+      background: white;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #6846ff;
+      box-shadow: 0 0 0 3px rgba(104,70,255,.1);
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    /* =====================================================
+       PROFILE
+    ===================================================== */
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #6846ff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .business-avatar {
+      border-radius: 18px;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 7px;
+    }
+
+    .badge-person {
+      background: #eee9ff;
+      color: #6846ff;
+    }
+
+    .badge-business {
+      background: #e6f4ff;
+      color: #0878c9;
+    }
+
+    .badge-verified {
+      background: #e4f8e9;
+      color: #20843b;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      background: #f7f7f7;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    /* =====================================================
+       SEARCH
+    ===================================================== */
+
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    /* =====================================================
+       ALERT
+    ===================================================== */
+
+    #message {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      max-width: 350px;
+      padding: 15px 18px;
+      border-radius: 12px;
+      background: #222;
+      color: white;
+      z-index: 9999;
+      display: none;
+      box-shadow: 0 8px 30px rgba(0,0,0,.2);
+    }
+
+    #message.success {
+      background: #188038;
+    }
+
+    #message.error {
+      background: #c62828;
+    }
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 750px) {
+
+      header {
+        padding: 0 15px;
+      }
+
+      nav button {
+        padding: 8px;
+        font-size: 13px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 35px 25px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .account-types {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-header {
+        align-items: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
 
-<div class="header-inner">
+  <div
+    class="logo"
+    onclick="showPage('homePage')"
+  >
+    ShoppingBuddy
+  </div>
 
-<div class="logo">
-<div class="logo-icon">🛍️</div>
-ShoppingBuddy
-</div>
+  <nav id="mainNav">
 
-<nav>
+    <button onclick="showPage('homePage')">
+      Home
+    </button>
 
-<button onclick="showPage('home')" class="active">
-🏠 <span>Home</span>
-</button>
+    <button onclick="showPage('activitiesPage')">
+      Zoeken
+    </button>
 
-<button onclick="showPage('search')">
-🔎 <span>Zoeken</span>
-</button>
+    <button onclick="showPage('eventsPage')">
+      Events
+    </button>
 
-<button onclick="showPage('events')">
-🎉 <span>Events</span>
-</button>
+    <button
+      id="profileNav"
+      class="nav-profile"
+      onclick="showPage('profilePage')"
+    >
+      Profiel
+    </button>
 
-<button onclick="showPage('create')">
-➕ <span>Aanmaken</span>
-</button>
+    <button
+      id="loginNav"
+      onclick="showPage('loginPage')"
+    >
+      Inloggen
+    </button>
 
-<button onclick="showPage('chat')">
-💬 <span>Chat</span>
-</button>
+    <button
+      id="logoutNav"
+      class="hidden"
+      onclick="logout()"
+    >
+      Uitloggen
+    </button>
 
-<button onclick="showPage('profile')">
-👤 <span>Profiel</span>
-</button>
-
-</nav>
-
-</div>
+  </nav>
 
 </header>
 
-<main>
 
+<!-- =====================================================
+     HOME
+===================================================== -->
 
-<!-- HOME -->
-
-<section id="home" class="page active">
-
-<div class="hero">
-
-<div class="hero-content">
-
-<h1>Ga samen.<br>Beleef meer.</h1>
-
-<p>
-Vind mensen om samen mee te shoppen, koffie te drinken,
-te eten, naar de cinema te gaan of gewoon iets leuks te doen.
-</p>
-
-<div class="hero-buttons">
-
-<button class="btn btn-white"
-onclick="showPage('search')">
-🔎 Vind een activiteit
-</button>
-
-<button class="btn btn-white"
-onclick="showPage('create')">
-➕ Maak activiteit
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="home-search">
-
-<input
-id="homeSearch"
-placeholder="🔎 Waar wil je naartoe?"
-onkeydown="if(event.key==='Enter') searchFromHome()"
+<section
+  id="homePage"
+  class="page active"
 >
 
-<button class="btn btn-primary"
-onclick="searchFromHome()">
-Zoeken
-</button>
+  <div class="hero">
 
-</div>
+    <h1>
+      Ga samen.<br>
+      Beleef meer.
+    </h1>
 
+    <p>
+      Vind mensen om samen te shoppen, koffie te drinken,
+      iets te eten, naar een event te gaan of gewoon
+      gezellig iets te doen.
+    </p>
 
-<div class="section">
+    <br>
 
-<div class="section-title">
-<h2>Wat wil je doen?</h2>
-</div>
+    <button
+      class="btn btn-white"
+      onclick="showPage('activitiesPage')"
+    >
+      Activiteiten zoeken
+    </button>
 
-<div class="category-grid">
+    <button
+      class="btn btn-secondary"
+      onclick="requireLogin('createPage')"
+    >
+      Activiteit maken
+    </button>
 
-<div class="category" onclick="filterCategory('Shoppen')">
-<div class="category-icon">🛍️</div>
-<span>Shoppen</span>
-</div>
-
-<div class="category" onclick="filterCategory('Koffie')">
-<div class="category-icon">☕</div>
-<span>Koffie</span>
-</div>
-
-<div class="category" onclick="filterCategory('Eten')">
-<div class="category-icon">🍔</div>
-<span>Eten</span>
-</div>
-
-<div class="category" onclick="filterCategory('Cinema')">
-<div class="category-icon">🎬</div>
-<span>Cinema</span>
-</div>
-
-<div class="category" onclick="filterCategory('Sport')">
-<div class="category-icon">🏋️</div>
-<span>Sport</span>
-</div>
-
-<div class="category" onclick="filterCategory('Gaming')">
-<div class="category-icon">🎮</div>
-<span>Gaming</span>
-</div>
-
-<div class="category" onclick="filterCategory('Concert')">
-<div class="category-icon">🎵</div>
-<span>Concert</span>
-</div>
-
-<div class="category" onclick="showPage('events')">
-<div class="category-icon">🎉</div>
-<span>Events</span>
-</div>
-
-</div>
-
-</div>
+  </div>
 
 
-<div class="section">
+  <div class="card">
 
-<div class="section-title">
+    <h2>Wat wil je doen?</h2>
 
-<div>
-<h2>🔥 Populaire activiteiten</h2>
-<p>Ontdek wat er momenteel gebeurt</p>
-</div>
+    <br>
 
-<button class="btn btn-primary btn-small"
-onclick="showPage('search')">
-Alles bekijken
-</button>
+    <div class="grid">
 
-</div>
+      <div class="card activity-card">
+        🛍️<br><br>
+        <strong>Shoppen</strong>
+      </div>
 
-<div id="homeActivities" class="grid"></div>
+      <div class="card activity-card">
+        ☕<br><br>
+        <strong>Koffie</strong>
+      </div>
 
-</div>
+      <div class="card activity-card">
+        🍕<br><br>
+        <strong>Eten</strong>
+      </div>
 
+      <div class="card activity-card">
+        🎬<br><br>
+        <strong>Cinema</strong>
+      </div>
 
-<div class="section">
+      <div class="card activity-card">
+        🎮<br><br>
+        <strong>Gaming</strong>
+      </div>
 
-<div class="section-title">
+      <div class="card activity-card">
+        🎵<br><br>
+        <strong>Events</strong>
+      </div>
 
-<div>
-<h2>🎉 Lokale events</h2>
-<p>Ontdek events georganiseerd door gemeenten en organisaties</p>
-</div>
+    </div>
 
-<button class="btn btn-primary btn-small"
-onclick="showPage('events')">
-Alle events
-</button>
-
-</div>
-
-<div id="homeEvents" class="grid"></div>
-
-</div>
+  </div>
 
 </section>
 
 
-<!-- SEARCH -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
-<section id="search" class="page">
-
-<div class="section-title">
-<h2>🔎 Activiteiten zoeken</h2>
-</div>
-
-<div class="card" style="margin-bottom:20px">
-
-<div class="form-group">
-
-<label>Waar wil je naartoe?</label>
-
-<input
-id="searchInput"
-type="text"
-placeholder="bv. Wijnegem, Gent, Aalst..."
-oninput="renderActivities()"
+<section
+  id="loginPage"
+  class="page"
 >
 
-</div>
+  <div class="auth-wrapper">
 
-<div class="form-group">
+    <div class="auth-card">
 
-<label>Wat wil je doen?</label>
+      <h1>Welkom terug 👋</h1>
 
-<select id="categoryFilter"
-onchange="renderActivities()">
+      <p>
+        Log in op je ShoppingBuddy-account.
+      </p>
 
-<option value="">Alles</option>
-<option value="Shoppen">🛍️ Shoppen</option>
-<option value="Koffie">☕ Koffie</option>
-<option value="Cinema">🎬 Cinema</option>
-<option value="Eten">🍔 Eten</option>
-<option value="Sport">🏋️ Sport</option>
-<option value="Gaming">🎮 Gaming</option>
-<option value="Concert">🎵 Concert</option>
+      <form onsubmit="login(event)">
 
-</select>
+        <div class="form-group">
 
-</div>
+          <label>E-mailadres</label>
 
-</div>
+          <input
+            id="loginEmail"
+            type="email"
+            required
+          >
 
-<div id="activitiesGrid" class="grid"></div>
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Wachtwoord</label>
+
+          <input
+            id="loginPassword"
+            type="password"
+            required
+          >
+
+        </div>
+
+
+        <button
+          class="btn btn-primary"
+          style="width:100%"
+        >
+          Inloggen
+        </button>
+
+      </form>
+
+      <br>
+
+      <p style="text-align:center">
+
+        Nog geen account?
+
+        <button
+          class="btn"
+          onclick="showPage('registerPage')"
+        >
+          Registreren
+        </button>
+
+      </p>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- ACTIVITY DETAIL -->
+<!-- =====================================================
+     REGISTER
+===================================================== -->
 
-<section id="activityDetail" class="page">
-
-<div id="activityDetailContent"></div>
-
-</section>
-
-
-<!-- EVENTS -->
-
-<section id="events" class="page">
-
-<div class="event-banner">
-
-<h1>🎉 Special Events</h1>
-
-<p style="margin-top:10px;max-width:700px;line-height:1.6">
-
-Ontdek lokale evenementen georganiseerd door gemeenten,
-steden, verenigingen en andere organisaties.
-
-</p>
-
-</div>
-
-
-<div class="section-title">
-
-<div>
-<h2>📍 Events bij jou in de buurt</h2>
-<p>Officiële lokale evenementen</p>
-</div>
-
-</div>
-
-<div id="eventsGrid" class="grid"></div>
-
-</section>
-
-
-<!-- CREATE -->
-
-<section id="create" class="page">
-
-<div class="section-title">
-<h2>➕ Activiteit aanmaken</h2>
-</div>
-
-<div class="card form-card">
-
-<div class="form-group">
-
-<label>Waar wil je naartoe?</label>
-
-<input
-id="newLocation"
-placeholder="bv. Wijnegem Shopping"
+<section
+  id="registerPage"
+  class="page"
 >
 
-</div>
+  <div class="auth-wrapper">
 
-<div class="form-group">
+    <div class="auth-card">
 
-<label>Datum</label>
+      <h1>Maak je account</h1>
 
-<input id="newDate" type="date">
+      <p>
+        Kies eerst welk type account je wilt.
+      </p>
 
-</div>
 
-<div class="form-group">
+      <div class="account-types">
 
-<label>Uur</label>
+        <button
+          id="personType"
+          class="account-type active"
+          onclick="selectAccountType('PERSON')"
+        >
 
-<input id="newTime" type="time">
+          <div class="icon">
+            👤
+          </div>
 
-</div>
+          <strong>
+            Persoon
+          </strong>
 
-<div class="form-group">
+          <span>
+            Zoek mensen om samen activiteiten te doen.
+          </span>
 
-<label>Wat wil je doen?</label>
+        </button>
 
-<div class="checkbox-grid">
 
-<label class="checkbox">
-<input type="checkbox" value="Shoppen" class="newCategory">
-🛍️ Shoppen
-</label>
+        <button
+          id="businessType"
+          class="account-type"
+          onclick="selectAccountType('BUSINESS')"
+        >
 
-<label class="checkbox">
-<input type="checkbox" value="Koffie" class="newCategory">
-☕ Koffie
-</label>
+          <div class="icon">
+            🏢
+          </div>
 
-<label class="checkbox">
-<input type="checkbox" value="Cinema" class="newCategory">
-🎬 Cinema
-</label>
+          <strong>
+            Bedrijf / organisatie
+          </strong>
 
-<label class="checkbox">
-<input type="checkbox" value="Eten" class="newCategory">
-🍔 Eten
-</label>
+          <span>
+            Plaats activiteiten en officiële events.
+          </span>
 
-<label class="checkbox">
-<input type="checkbox" value="Sport" class="newCategory">
-🏋️ Sport
-</label>
+        </button>
 
-<label class="checkbox">
-<input type="checkbox" value="Gaming" class="newCategory">
-🎮 Gaming
-</label>
+      </div>
 
-<label class="checkbox">
-<input type="checkbox" value="Concert" class="newCategory">
-🎵 Concert
-</label>
 
-</div>
+      <form onsubmit="register(event)">
 
-</div>
+        <div
+          id="personFields"
+        >
 
-<div class="form-group">
+          <div class="form-group">
 
-<label>Hoeveel mensen mogen mee?</label>
+            <label>Naam</label>
 
-<select id="newSlots">
+            <input
+              id="fullName"
+              type="text"
+              required
+            >
 
-<option value="1">1 persoon</option>
-<option value="2" selected>2 personen</option>
-<option value="3">3 personen</option>
-<option value="4">4 personen</option>
-<option value="5">5 personen</option>
+          </div>
 
-</select>
 
-</div>
+          <div class="form-row">
 
-<div class="form-group">
+            <div class="form-group">
 
-<label>Extra informatie</label>
+              <label>Gebruikersnaam</label>
 
-<textarea
-id="newDescription"
-placeholder="Vertel kort wat je van plan bent..."
-></textarea>
+              <input
+                id="username"
+                type="text"
+                required
+              >
 
-</div>
+            </div>
 
-<button
-class="btn btn-primary"
-onclick="createActivity()">
 
-🛍️ Activiteit plaatsen
+            <div class="form-group">
 
-</button>
+              <label>Leeftijd</label>
 
-</div>
+              <input
+                id="age"
+                type="number"
+                min="16"
+                max="100"
+              >
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="businessFields"
+          class="hidden"
+        >
+
+          <div class="form-group">
+
+            <label>Naam bedrijf / organisatie</label>
+
+            <input
+              id="companyName"
+              type="text"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Type organisatie</label>
+
+            <select id="companyType">
+
+              <option value="">
+                Kies type
+              </option>
+
+              <option value="Bedrijf">
+                Bedrijf
+              </option>
+
+              <option value="Gemeente">
+                Gemeente
+              </option>
+
+              <option value="Vereniging">
+                Vereniging
+              </option>
+
+              <option value="Organisatie">
+                Organisatie
+              </option>
+
+              <option value="Winkelcentrum">
+                Winkelcentrum
+              </option>
+
+              <option value="Andere">
+                Andere
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Website</label>
+
+            <input
+              id="companyWebsite"
+              type="url"
+              placeholder="https://..."
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Beschrijving</label>
+
+            <textarea
+              id="companyDescription"
+            ></textarea>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Locatie</label>
+
+          <input
+            id="location"
+            type="text"
+            placeholder="Bijvoorbeeld Aalst"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>E-mailadres</label>
+
+          <input
+            id="registerEmail"
+            type="email"
+            required
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>Wachtwoord</label>
+
+          <input
+            id="registerPassword"
+            type="password"
+            minlength="6"
+            required
+          >
+
+        </div>
+
+
+        <button
+          class="btn btn-primary"
+          style="width:100%"
+        >
+          Account aanmaken
+        </button>
+
+      </form>
+
+
+      <br>
+
+      <p style="text-align:center">
+
+        Heb je al een account?
+
+        <button
+          class="btn"
+          onclick="showPage('loginPage')"
+        >
+          Inloggen
+        </button>
+
+      </p>
+
+    </div>
+
+  </div>
 
 </section>
 
 
-<!-- PROFILE -->
-
-<section id="profile" class="page">
-
-<div class="profile-header">
-
-<div class="avatar">S</div>
-
-<div>
-
-<h1>Sarah, 24</h1>
-
-<p class="muted">📍 Aalst</p>
-
-<div class="verification">
-
-<span class="verified">✓ E-mail bevestigd</span>
-
-<span class="verified">✓ Telefoon bevestigd</span>
-
-<span class="verified">✓ Profiel bevestigd</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="profile-stats">
-
-<div class="card stat">
-<h2>3</h2>
-<p class="muted">Georganiseerd</p>
-</div>
-
-<div class="card stat">
-<h2>7</h2>
-<p class="muted">Meegegaan</p>
-</div>
-
-<div class="card stat">
-<h2>5.0 ⭐</h2>
-<p class="muted">Beoordeling</p>
-</div>
-
-<div class="card stat">
-<h2>98%</h2>
-<p class="muted">Betrouwbaarheid</p>
-</div>
-
-</div>
-
-
-<div class="reliability">
-
-<div class="card">
-
-<h2>🛡️ Betrouwbaarheidsprofiel</h2>
-
-<p class="muted" style="margin-top:8px">
-Je betrouwbaarheid wordt opgebouwd door positieve ervaringen.
-</p>
-
-<div style="margin-top:20px">
-
-<strong>Op tijd aanwezig</strong>
-
-<div class="progress">
-<div class="progress-bar" style="width:98%"></div>
-</div>
-
-<p class="muted" style="margin-top:5px">98%</p>
-
-</div>
-
-<div style="margin-top:18px">
-
-<strong>Op afspraken aanwezig</strong>
-
-<div class="progress">
-<div class="progress-bar" style="width:96%"></div>
-</div>
-
-<p class="muted" style="margin-top:5px">96%</p>
-
-</div>
-
-<div style="margin-top:18px">
-
-<strong>Positieve beoordelingen</strong>
-
-<div class="progress">
-<div class="progress-bar" style="width:100%"></div>
-</div>
-
-<p class="muted" style="margin-top:5px">100%</p>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🏆 Badges</h2>
-
-<div class="badges" style="margin-top:18px">
-
-<div class="badge">⭐ Betrouwbaar</div>
-<div class="badge">⏰ Komt op tijd</div>
-<div class="badge">😊 Sociaal</div>
-<div class="badge">🛍️ ShoppingBuddy</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card" style="margin-top:20px">
-
-<h2>Over mij</h2>
-
-<p class="activity-description" style="margin-top:10px">
-
-Ik ga graag shoppen en vind het leuk om nieuwe mensen
-te leren kennen.
-
-</p>
-
-<div class="tags" style="margin-top:15px">
-
-<span class="tag tag-purple">🛍️ Shoppen</span>
-<span class="tag">☕ Koffie</span>
-<span class="tag">🎬 Cinema</span>
-<span class="tag">🍔 Eten</span>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- REQUESTS -->
-
-<section id="requests" class="page">
-
-<div class="section-title">
-<h2>👥 Aanvragen beheren</h2>
-</div>
-
-<div class="card">
-
-<h2>🛍️ Wijnegem Shopping</h2>
-
-<p class="muted" style="margin-top:5px">
-Zaterdag · 14:00 · nog 2 plaatsen
-</p>
-
-<div id="requestsList"></div>
-
-</div>
-
-</section>
-
-
-<!-- CHAT -->
-
-<section id="chat" class="page">
-
-<div class="chat-container">
-
-<div class="chat-header">
-
-<h2>🛍️ Wijnegem Shopping</h2>
-
-<p class="muted">
-Zaterdag · 14:00 · Wijnegem
-</p>
-
-</div>
-
-<div id="messages" class="messages">
-
-<div class="message">
-
-<div class="message-name">Sarah</div>
-
-Zullen we om 14u aan de hoofdingang afspreken?
-
-</div>
-
-<div class="message">
-
-<div class="message-name">Lisa</div>
-
-Ja perfect 😊
-
-</div>
-
-<div class="message me">
-
-<div class="message-name">Jij</div>
-
-Voor mij ook!
-
-</div>
-
-</div>
-
-<div class="chat-input">
-
-<input
-id="messageInput"
-placeholder="Typ een bericht..."
-onkeydown="if(event.key==='Enter') sendMessage()"
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
+<section
+  id="profilePage"
+  class="page"
 >
 
-<button
-class="btn btn-primary"
-onclick="sendMessage()">
+  <div id="profileContent">
 
-Verstuur
+    <div class="card">
 
-</button>
+      <h2>
+        Je profiel
+      </h2>
 
-</div>
+      <br>
 
-</div>
+      <p>
+        Laden...
+      </p>
+
+    </div>
+
+  </div>
 
 </section>
 
-</main>
+
+<!-- =====================================================
+     EDIT PROFILE
+===================================================== -->
+
+<section
+  id="editProfilePage"
+  class="page"
+>
+
+  <div class="card">
+
+    <h1>
+      Profiel aanpassen
+    </h1>
+
+    <br>
+
+    <form onsubmit="saveProfile(event)">
+
+      <div id="editPersonFields">
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label>Naam</label>
+
+            <input
+              id="editFullName"
+              type="text"
+            >
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Leeftijd</label>
+
+            <input
+              id="editAge"
+              type="number"
+              min="16"
+              max="100"
+            >
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Gebruikersnaam</label>
+
+          <input
+            id="editUsername"
+            type="text"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div id="editBusinessFields">
+
+        <div class="form-group">
+
+          <label>Bedrijfsnaam</label>
+
+          <input
+            id="editCompanyName"
+            type="text"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Type</label>
+
+          <select id="editCompanyType">
+
+            <option value="Bedrijf">Bedrijf</option>
+            <option value="Gemeente">Gemeente</option>
+            <option value="Vereniging">Vereniging</option>
+            <option value="Organisatie">Organisatie</option>
+            <option value="Winkelcentrum">Winkelcentrum</option>
+            <option value="Andere">Andere</option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Website</label>
+
+          <input
+            id="editCompanyWebsite"
+            type="url"
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Bedrijfsbeschrijving</label>
+
+          <textarea
+            id="editCompanyDescription"
+          ></textarea>
+
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Locatie</label>
+
+        <input
+          id="editLocation"
+          type="text"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>Bio / beschrijving</label>
+
+        <textarea
+          id="editBio"
+        ></textarea>
+
+      </div>
+
+
+      <button
+        class="btn btn-primary"
+      >
+        Profiel opslaan
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        onclick="showPage('profilePage')"
+      >
+        Annuleren
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     ACTIVITIES
+===================================================== -->
+
+<section
+  id="activitiesPage"
+  class="page"
+>
+
+  <h1>
+    Activiteiten
+  </h1>
+
+  <br>
+
+  <div class="search-box">
+
+    <input
+      placeholder="Waar wil je naartoe?"
+    >
+
+    <button class="btn btn-primary">
+      Zoeken
+    </button>
+
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card activity-card">
+
+      <div style="font-size:30px">
+        🛍️
+      </div>
+
+      <h3>
+        Samen shoppen
+      </h3>
+
+      <p class="muted">
+        Zoek iemand om samen te shoppen.
+      </p>
+
+    </div>
+
+
+    <div class="card activity-card">
+
+      <div style="font-size:30px">
+        ☕
+      </div>
+
+      <h3>
+        Koffie drinken
+      </h3>
+
+      <p class="muted">
+        Gezellig iets drinken.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     CREATE
+===================================================== -->
+
+<section
+  id="createPage"
+  class="page"
+>
+
+  <div class="card">
+
+    <h1>
+      Activiteit maken
+    </h1>
+
+    <br>
+
+    <p class="muted">
+      Deze functie bouwen we als volgende stap volledig uit.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     EVENTS
+===================================================== -->
+
+<section
+  id="eventsPage"
+  class="page"
+>
+
+  <h1>
+    Events
+  </h1>
+
+  <br>
+
+  <div class="card">
+
+    <h2>
+      Binnenkort
+    </h2>
+
+    <p class="muted">
+      Officiële events van bedrijven,
+      gemeenten en organisaties komen hier.
+    </p>
+
+  </div>
+
+</section>
+
+
+<div id="message"></div>
 
 
 <script>
 
-/* =========================
-   ACTIVITIES
-========================= */
-
-let activities = [
-
-{
-id:1,
-location:"Wijnegem Shopping",
-date:"2026-10-03",
-time:"14:00",
-categories:["Shoppen","Koffie"],
-person:"Sarah",
-age:24,
-slots:2,
-description:"Ik wil vooral kledingwinkels doen en daarna iets drinken.",
-rating:"5.0",
-reliability:98
-},
-
-{
-id:2,
-location:"Gent Zuid",
-date:"2026-10-03",
-time:"13:30",
-categories:["Shoppen"],
-person:"Jonas",
-age:27,
-slots:1,
-description:"Gewoon gezellig samen shoppen.",
-rating:"4.8",
-reliability:95
-},
-
-{
-id:3,
-location:"Aalst",
-date:"2026-10-04",
-time:"15:00",
-categories:["Koffie"],
-person:"Emma",
-age:25,
-slots:2,
-description:"Samen koffie drinken en wat bijpraten.",
-rating:"4.9",
-reliability:97
-},
-
-{
-id:4,
-location:"Aalst Centrum",
-date:"2026-10-05",
-time:"18:30",
-categories:["Eten"],
-person:"Lisa",
-age:23,
-slots:3,
-description:"Samen iets gaan eten en daarna misschien nog een drankje.",
-rating:"5.0",
-reliability:99
-}
-
-];
-
-
-/* =========================
-   SPECIAL EVENTS
-========================= */
-
-let events = [
-
-{
-id:1,
-title:"Parkconcert Aalst",
-date:"2026-10-04",
-time:"19:30",
-location:"Stadspark Aalst",
-organization:"Stad Aalst",
-type:"Gemeente",
-icon:"🎵",
-description:"Een gezellige zomeravond met live muziek in het stadspark.",
-free:true
-},
-
-{
-id:2,
-title:"Herfstmarkt",
-date:"2026-10-10",
-time:"10:00",
-location:"Markt Lede",
-organization:"Gemeente Lede",
-type:"Gemeente",
-icon:"🍂",
-description:"Lokale markt met standhouders, muziek en activiteiten.",
-free:true
-},
-
-{
-id:3,
-title:"Shopping Night",
-date:"2026-10-16",
-time:"18:00",
-location:"Centrum Dendermonde",
-organization:"Dendermonde Events",
-type:"Organisatie",
-icon:"🛍️",
-description:"Avondshopping met winkels, animatie en speciale acties.",
-free:true
-}
+  /* =====================================================
+     SUPABASE
+  ===================================================== */
 
-];
+  const SUPABASE_URL =
+    "https://pxuykwgofhcjybsitbwg.supabase.co";
 
+  /*
+    VERVANG DIT MET DE PUBLISHABLE / ANON KEY
+    VAN UW SUPABASE PROJECT.
 
-/* =========================
-   REQUESTS
-========================= */
+    Supabase:
+    Project Settings
+    → API
+    → Publishable key / anon key
+  */
 
-let requests = [
+  const SUPABASE_ANON_KEY =
+    "PLAK_HIER_UW_SUPABASE_PUBLISHABLE_KEY";
 
-{
-id:1,
-name:"Lisa",
-age:23,
-location:"Aalst",
-message:"Lijkt me gezellig!"
-},
 
-{
-id:2,
-name:"Emma",
-age:25,
-location:"Dendermonde",
-message:"Ik zou graag meegaan."
-},
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-{
-id:3,
-name:"Tom",
-age:29,
-location:"Gent",
-message:"Ik ben zaterdag beschikbaar."
-}
 
-];
+  /* =====================================================
+     STATE
+  ===================================================== */
 
+  let currentUser = null;
+  let currentProfile = null;
+  let selectedAccountType = "PERSON";
 
-/* =========================
-   NAVIGATION
-========================= */
 
-function showPage(pageId) {
+  /* =====================================================
+     MESSAGE
+  ===================================================== */
 
-document.querySelectorAll(".page").forEach(page => {
-page.classList.remove("active");
-});
+  function showMessage(
+    text,
+    type = "success"
+  ) {
 
-const page = document.getElementById(pageId);
+    const box =
+      document.getElementById("message");
 
-if(page) {
-page.classList.add("active");
-}
+    box.textContent = text;
 
-document.querySelectorAll("nav button").forEach(button => {
-button.classList.remove("active");
-});
+    box.className = type;
 
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
+    box.style.display = "block";
 
-if(pageId === "search") {
-renderActivities();
-}
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 4000);
+  }
 
-if(pageId === "home") {
-renderHomeActivities();
-renderHomeEvents();
-}
 
-if(pageId === "events") {
-renderEvents();
-}
+  /* =====================================================
+     PAGE NAVIGATION
+  ===================================================== */
 
-if(pageId === "requests") {
-renderRequests();
-}
+  function showPage(id) {
 
-}
+    document
+      .querySelectorAll(".page")
+      .forEach(page => {
+        page.classList.remove("active");
+      });
 
+    const page =
+      document.getElementById(id);
 
-/* =========================
-   DATES
-========================= */
+    if (page) {
+      page.classList.add("active");
+    }
 
-function formatDate(date) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
 
-if(!date) return "";
+    if (id === "profilePage") {
+      loadProfile();
+    }
 
-const d = new Date(date + "T00:00:00");
+    if (id === "editProfilePage") {
+      loadEditProfile();
+    }
+  }
 
-return d.toLocaleDateString("nl-BE", {
-weekday:"short",
-day:"numeric",
-month:"long"
-});
 
-}
+  /* =====================================================
+     LOGIN REQUIRED
+  ===================================================== */
 
+  function requireLogin(page) {
 
-/* =========================
-   ICON
-========================= */
+    if (!currentUser) {
+      showMessage(
+        "Je moet eerst ingelogd zijn.",
+        "error"
+      );
 
-function categoryIcon(categories) {
+      showPage("loginPage");
 
-if(categories.includes("Shoppen")) return "🛍️";
-if(categories.includes("Koffie")) return "☕";
-if(categories.includes("Cinema")) return "🎬";
-if(categories.includes("Eten")) return "🍔";
-if(categories.includes("Sport")) return "🏋️";
-if(categories.includes("Gaming")) return "🎮";
-if(categories.includes("Concert")) return "🎵";
+      return;
+    }
 
-return "✨";
+    showPage(page);
+  }
 
-}
 
+  /* =====================================================
+     ACCOUNT TYPE
+  ===================================================== */
 
-/* =========================
-   ACTIVITY CARD
-========================= */
+  function selectAccountType(type) {
 
-function activityHTML(activity) {
+    selectedAccountType = type;
 
-return `
+    document
+      .getElementById("personType")
+      .classList.toggle(
+        "active",
+        type === "PERSON"
+      );
 
-<div class="card activity-card">
+    document
+      .getElementById("businessType")
+      .classList.toggle(
+        "active",
+        type === "BUSINESS"
+      );
 
-<div class="activity-icon">
-${categoryIcon(activity.categories)}
-</div>
 
-<div>
+    document
+      .getElementById("personFields")
+      .classList.toggle(
+        "hidden",
+        type !== "PERSON"
+      );
 
-<h3>${activity.location}</h3>
 
-<p class="muted">
-📅 ${formatDate(activity.date)}
-· 🕐 ${activity.time}
-</p>
+    document
+      .getElementById("businessFields")
+      .classList.toggle(
+        "hidden",
+        type !== "BUSINESS"
+      );
 
-</div>
 
-<div class="tags">
+    document
+      .getElementById("fullName")
+      .required = type === "PERSON";
 
-${activity.categories.map(category =>
-`<span class="tag">${category}</span>`
-).join("")}
+    document
+      .getElementById("username")
+      .required = type === "PERSON";
 
-</div>
+    document
+      .getElementById("companyName")
+      .required = type === "BUSINESS";
 
-<p class="activity-description">
-${activity.description}
-</p>
+    document
+      .getElementById("companyType")
+      .required = type === "BUSINESS";
+  }
 
-<p class="muted">
-👤 ${activity.person}, ${activity.age}
-· 👥 nog ${activity.slots}
-plaats${activity.slots === 1 ? "" : "en"}
-</p>
 
-<div class="tags">
+  /* =====================================================
+     REGISTER
+  ===================================================== */
 
-<span class="tag tag-purple">
-⭐ ${activity.rating || "Nieuw"}
-</span>
+  async function register(event) {
 
-<span class="tag tag-green">
-🛡️ ${activity.reliability || 0}%
-</span>
+    event.preventDefault();
 
-</div>
+    const email =
+      document
+        .getElementById("registerEmail")
+        .value
+        .trim();
 
-<button
-class="btn btn-primary"
-onclick="openActivity(${activity.id})">
+    const password =
+      document
+        .getElementById("registerPassword")
+        .value;
 
-Bekijk activiteit
+    const location =
+      document
+        .getElementById("location")
+        .value
+        .trim();
 
-</button>
 
-</div>
+    let metadata = {
+      account_type: selectedAccountType,
+      location: location
+    };
 
-`;
 
-}
+    if (
+      selectedAccountType === "PERSON"
+    ) {
 
+      metadata.full_name =
+        document
+          .getElementById("fullName")
+          .value
+          .trim();
 
-/* =========================
-   HOME
-========================= */
+      metadata.username =
+        document
+          .getElementById("username")
+          .value
+          .trim();
 
-function renderHomeActivities() {
+    } else {
 
-const container =
-document.getElementById("homeActivities");
+      metadata.full_name =
+        document
+          .getElementById("companyName")
+          .value
+          .trim();
 
-container.innerHTML =
-activities.slice(0,3)
-.map(activityHTML)
-.join("");
+      metadata.company_name =
+        document
+          .getElementById("companyName")
+          .value
+          .trim();
 
-}
+    }
 
 
-function renderHomeEvents() {
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.signUp({
 
-const container =
-document.getElementById("homeEvents");
+      email,
 
-container.innerHTML =
-events.slice(0,3)
-.map(eventHTML)
-.join("");
+      password,
 
-}
+      options: {
+        data: metadata
+      }
 
+    });
 
-/* =========================
-   SEARCH
-========================= */
 
-function renderActivities() {
+    if (error) {
 
-const container =
-document.getElementById("activitiesGrid");
+      showMessage(
+        error.message,
+        "error"
+      );
 
-const search =
-(document.getElementById("searchInput").value || "")
-.toLowerCase();
+      return;
+    }
 
-const category =
-document.getElementById("categoryFilter").value;
 
-const filtered =
-activities.filter(activity => {
+    /*
+      Wanneer e-mailbevestiging uitstaat,
+      is de gebruiker onmiddellijk ingelogd.
+    */
 
-const locationMatch =
-activity.location
-.toLowerCase()
-.includes(search);
+    if (data.user) {
 
-const categoryMatch =
-!category ||
-activity.categories.includes(category);
+      showMessage(
+        "Account aangemaakt!",
+        "success"
+      );
 
-return locationMatch && categoryMatch;
+      currentUser =
+        data.user;
 
-});
+      await loadCurrentProfile();
 
+      showPage("profilePage");
 
-if(filtered.length === 0) {
+    }
 
-container.innerHTML = `
+  }
 
-<div class="card empty">
 
-<h3>Geen activiteiten gevonden 😕</h3>
+  /* =====================================================
+     LOGIN
+  ===================================================== */
 
-<p style="margin-top:8px">
-Misschien kun je zelf een activiteit aanmaken.
-</p>
+  async function login(event) {
 
-</div>
+    event.preventDefault();
 
-`;
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
 
-return;
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
 
-}
 
-container.innerHTML =
-filtered.map(activityHTML).join("");
+    const {
+      data,
+      error
+    } = await supabaseClient.auth.signInWithPassword({
 
-}
+      email,
+      password
 
+    });
 
-function searchFromHome() {
 
-const value =
-document.getElementById("homeSearch").value;
+    if (error) {
 
-showPage("search");
+      showMessage(
+        error.message,
+        "error"
+      );
 
-document.getElementById("searchInput").value = value;
+      return;
+    }
 
-renderActivities();
 
-}
+    currentUser =
+      data.user;
 
+    await loadCurrentProfile();
 
-function filterCategory(category) {
+    showMessage(
+      "Welkom terug!",
+      "success"
+    );
 
-showPage("search");
+    showPage("profilePage");
 
-document.getElementById("categoryFilter").value =
-category;
+    updateNavigation();
+  }
 
-renderActivities();
 
-}
+  /* =====================================================
+     LOGOUT
+  ===================================================== */
 
+  async function logout() {
 
-/* =========================
-   ACTIVITY DETAIL
-========================= */
+    await supabaseClient.auth.signOut();
 
-function openActivity(id) {
+    currentUser = null;
 
-const activity =
-activities.find(a => a.id === id);
+    currentProfile = null;
 
-if(!activity) return;
+    updateNavigation();
 
-const container =
-document.getElementById("activityDetailContent");
+    showMessage(
+      "Je bent uitgelogd.",
+      "success"
+    );
 
-container.innerHTML = `
+    showPage("homePage");
+  }
 
-<div class="detail-header">
 
-<div class="tags">
+  /* =====================================================
+     CURRENT PROFILE
+  ===================================================== */
 
-${activity.categories.map(category =>
-`<span class="tag"
-style="background:rgba(255,255,255,.18);color:white">
-${category}
-</span>`
-).join("")}
+  async function loadCurrentProfile() {
 
-</div>
+    if (!currentUser) {
+      return;
+    }
 
-<h1 style="margin-top:15px">
-${categoryIcon(activity.categories)}
-${activity.location}
-</h1>
 
-<p style="margin-top:8px;opacity:.9">
-Een ShoppingBuddy activiteit
-</p>
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id", currentUser.id)
+      .single();
 
-</div>
 
+    if (error) {
 
-<div class="detail-layout">
+      console.error(error);
 
-<div>
+      return;
+    }
 
-<div class="card">
 
-<h2>Over deze activiteit</h2>
+    currentProfile = data;
+  }
 
-<p class="activity-description"
-style="margin-top:12px">
 
-${activity.description}
+  /* =====================================================
+     PROFILE
+  ===================================================== */
 
-</p>
+  async function loadProfile() {
 
-<div class="detail-info">
+    await loadCurrentProfile();
 
-<div class="info-box">
-<strong>📅 Datum</strong>
-<p class="muted">${formatDate(activity.date)}</p>
-</div>
 
-<div class="info-box">
-<strong>🕐 Uur</strong>
-<p class="muted">${activity.time}</p>
-</div>
+    const container =
+      document.getElementById(
+        "profileContent"
+      );
 
-<div class="info-box">
-<strong>📍 Locatie</strong>
-<p class="muted">${activity.location}</p>
-</div>
 
-<div class="info-box">
-<strong>👥 Plaatsen</strong>
-<p class="muted">${activity.slots} beschikbaar</p>
-</div>
+    if (!currentUser) {
 
-</div>
+      container.innerHTML = `
 
-<button
-class="btn btn-primary"
-style="width:100%"
-onclick="joinActivity(${activity.id})">
+        <div class="card">
 
-🙋 Ik wil mee
+          <h2>Je bent nog niet ingelogd.</h2>
 
-</button>
+          <br>
 
-</div>
+          <button
+            class="btn btn-primary"
+            onclick="showPage('loginPage')"
+          >
+            Inloggen
+          </button>
 
+        </div>
 
-<div class="card" style="margin-top:20px">
+      `;
 
-<h2>👤 Organisator</h2>
+      return;
+    }
 
-<div class="organizer" style="margin-top:15px">
 
-<div class="small-avatar">
-${activity.person.charAt(0)}
-</div>
+    if (!currentProfile) {
 
-<div>
+      container.innerHTML = `
 
-<strong>
-${activity.person}, ${activity.age}
-</strong>
+        <div class="card">
 
-<p class="muted">
-📍 Aalst
-</p>
+          Profiel wordt geladen...
 
-</div>
+        </div>
 
-</div>
+      `;
 
-<div class="tags" style="margin-top:15px">
+      return;
+    }
 
-<span class="tag tag-purple">
-⭐ ${activity.rating}
-</span>
 
-<span class="tag tag-green">
-🛡️ ${activity.reliability}% betrouwbaar
-</span>
+    const isBusiness =
+      currentProfile.account_type ===
+      "BUSINESS";
 
-</div>
 
-<button
-class="btn btn-blue btn-small"
-style="margin-top:15px"
-onclick="showPage('profile')">
+    const displayName =
+      isBusiness
+        ? (
+            currentProfile.company_name ||
+            currentProfile.full_name ||
+            "Bedrijf"
+          )
+        : (
+            currentProfile.full_name ||
+            currentProfile.username ||
+            "Gebruiker"
+          );
 
-Bekijk profiel
 
-</button>
+    const initials =
+      displayName
+        .substring(0, 2)
+        .toUpperCase();
 
-</div>
 
-</div>
+    container.innerHTML = `
 
+      <div class="card">
 
-<div>
+        <div class="profile-header">
 
-<div class="card">
+          <div
+            class="avatar ${
+              isBusiness
+                ? "business-avatar"
+                : ""
+            }"
+          >
+            ${initials}
+          </div>
 
-<h3>🛡️ Veilig afspreken</h3>
 
-<p class="muted"
-style="margin-top:10px;line-height:1.6">
+          <div>
 
-Spreek af op een openbare plaats.
-De organisator bepaalt wie wordt toegelaten.
+            <h1>
+              ${escapeHTML(displayName)}
+            </h1>
 
-</p>
 
-</div>
+            ${
+              isBusiness
 
-<div class="card" style="margin-top:15px">
+              ? `
 
-<button
-class="btn"
-style="width:100%;background:#f3f3f7"
-onclick="alert('Activiteit opgeslagen bij je favorieten ❤️')">
+                <span class="badge badge-business">
+                  🏢 ${
+                    escapeHTML(
+                      currentProfile.company_type ||
+                      "Organisatie"
+                    )
+                  }
+                </span>
 
-♡ Bewaren
+              `
 
-</button>
+              : `
 
-<button
-class="btn btn-danger"
-style="width:100%;margin-top:10px"
-onclick="alert('Bedankt. De activiteit wordt gerapporteerd.')">
+                <span class="badge badge-person">
+                  👤 Persoon
+                </span>
 
-⚠️ Rapporteren
+              `
+            }
 
-</button>
 
-</div>
+            ${
+              currentProfile.is_verified
 
-</div>
+              ? `
 
-</div>
+                <span class="badge badge-verified">
+                  ✓ Geverifieerd
+                </span>
 
-`;
+              `
 
-showPage("activityDetail");
+              : ""
+            }
 
-}
+          </div>
 
+        </div>
 
-/* =========================
-   EVENTS
-========================= */
 
-function eventHTML(event) {
+        <div class="stats">
 
-return `
+          <div class="stat">
 
-<div class="card event-card special-event">
+            <strong>
+              ${currentProfile.rating || "5.0"}
+            </strong>
 
-<div class="event-icon">
-${event.icon}
-</div>
+            <span class="muted">
+              Beoordeling
+            </span>
 
-<div class="event-card-top">
+          </div>
 
-<div>
 
-<h3>${event.title}</h3>
+          <div class="stat">
 
-<p class="muted" style="margin-top:5px">
-📅 ${formatDate(event.date)}
-· 🕐 ${event.time}
-</p>
+            <strong>
+              ${currentProfile.reliability || 100}%
+            </strong>
 
-</div>
+            <span class="muted">
+              Betrouwbaarheid
+            </span>
 
-<span class="org-badge">
-🏛️ ${event.type}
-</span>
+          </div>
 
-</div>
 
-<p class="activity-description"
-style="margin-top:12px">
+          <div class="stat">
 
-${event.description}
+            <strong>
+              ${
+                currentProfile.location
+                  ? "📍"
+                  : "-"
+              }
+            </strong>
 
-</p>
+            <span class="muted">
+              ${
+                escapeHTML(
+                  currentProfile.location ||
+                  "Geen locatie"
+                )
+              }
+            </span>
 
-<div class="tags" style="margin-top:12px">
+          </div>
 
-<span class="tag">
-📍 ${event.location}
-</span>
+        </div>
 
-<span class="tag tag-blue">
-✓ ${event.organization}
-</span>
+      </div>
 
-${event.free
-? `<span class="tag tag-green">Gratis</span>`
-: ""}
 
-</div>
+      <div class="card">
 
-<button
-class="btn btn-primary"
-style="width:100%;margin-top:15px"
-onclick="openEvent(${event.id})">
+        ${
+          isBusiness
 
-Bekijk event
+          ? `
 
-</button>
+            <h2>
+              Over ${escapeHTML(displayName)}
+            </h2>
 
-</div>
+            <br>
 
-`;
+            <p>
+              ${
+                escapeHTML(
+                  currentProfile.company_description ||
+                  currentProfile.bio ||
+                  "Nog geen beschrijving."
+                )
+              }
+            </p>
 
-}
+            ${
+              currentProfile.company_website
 
+              ? `
 
-function renderEvents() {
+                <br>
 
-const container =
-document.getElementById("eventsGrid");
+                <a
+                  href="${escapeHTML(
+                    currentProfile.company_website
+                  )}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  🌐 Website
+                </a>
 
-container.innerHTML =
-events.map(eventHTML).join("");
+              `
 
-}
+              : ""
+            }
 
+          `
 
-function openEvent(id) {
+          : `
 
-const event =
-events.find(e => e.id === id);
+            <h2>
+              Over mij
+            </h2>
 
-if(!event) return;
+            <br>
 
-alert(
-`${event.title}\n\n` +
-`${formatDate(event.date)} · ${event.time}\n` +
-`${event.location}\n\n` +
-`${event.description}\n\n` +
-`Georganiseerd door: ${event.organization}`
-);
+            ${
+              currentProfile.age
+                ? `<p>🎂 ${currentProfile.age} jaar</p>`
+                : ""
+            }
 
-}
+            <br>
 
+            <p>
+              ${
+                escapeHTML(
+                  currentProfile.bio ||
+                  "Nog geen bio toegevoegd."
+                )
+              }
+            </p>
 
-/* =========================
-   CREATE ACTIVITY
-========================= */
+          `
+        }
 
-function createActivity() {
+      </div>
 
-const location =
-document.getElementById("newLocation").value.trim();
 
-const date =
-document.getElementById("newDate").value;
+      <div class="card">
 
-const time =
-document.getElementById("newTime").value;
+        <button
+          class="btn btn-primary"
+          onclick="showPage('editProfilePage')"
+        >
+          Profiel aanpassen
+        </button>
 
-const slots =
-Number(document.getElementById("newSlots").value);
+      </div>
 
-const description =
-document.getElementById("newDescription").value.trim();
+    `;
+  }
 
-const categories =
-[...document.querySelectorAll(".newCategory:checked")]
-.map(input => input.value);
 
+  /* =====================================================
+     EDIT PROFILE
+  ===================================================== */
 
-if(!location || !date || !time || categories.length === 0) {
+  async function loadEditProfile() {
 
-alert(
-"Vul minstens de locatie, datum, uur en activiteit in."
-);
+    await loadCurrentProfile();
 
-return;
 
-}
+    if (!currentProfile) {
+      return;
+    }
 
 
-const newActivity = {
+    const isBusiness =
+      currentProfile.account_type ===
+      "BUSINESS";
 
-id:Date.now(),
 
-location,
+    document
+      .getElementById("editPersonFields")
+      .classList.toggle(
+        "hidden",
+        isBusiness
+      );
 
-date,
 
-time,
+    document
+      .getElementById("editBusinessFields")
+      .classList.toggle(
+        "hidden",
+        !isBusiness
+      );
 
-categories,
 
-person:"Jij",
+    document
+      .getElementById("editFullName")
+      .value =
+        currentProfile.full_name || "";
 
-age:24,
 
-slots,
+    document
+      .getElementById("editUsername")
+      .value =
+        currentProfile.username || "";
 
-description:
-description ||
-"Nieuwe ShoppingBuddy activiteit.",
 
-rating:"Nieuw",
+    document
+      .getElementById("editAge")
+      .value =
+        currentProfile.age || "";
 
-reliability:100
 
-};
+    document
+      .getElementById("editCompanyName")
+      .value =
+        currentProfile.company_name || "";
 
 
-activities.unshift(newActivity);
+    document
+      .getElementById("editCompanyType")
+      .value =
+        currentProfile.company_type ||
+        "Bedrijf";
 
 
-document.getElementById("newLocation").value="";
-document.getElementById("newDate").value="";
-document.getElementById("newTime").value="";
-document.getElementById("newDescription").value="";
+    document
+      .getElementById("editCompanyWebsite")
+      .value =
+        currentProfile.company_website || "";
 
-document.querySelectorAll(".newCategory")
-.forEach(input => input.checked=false);
 
+    document
+      .getElementById("editCompanyDescription")
+      .value =
+        currentProfile.company_description || "";
 
-alert("Je activiteit is geplaatst! 🛍️");
 
-openActivity(newActivity.id);
+    document
+      .getElementById("editLocation")
+      .value =
+        currentProfile.location || "";
 
-}
 
+    document
+      .getElementById("editBio")
+      .value =
+        currentProfile.bio || "";
+  }
 
-/* =========================
-   JOIN
-========================= */
 
-function joinActivity(id) {
+  /* =====================================================
+     SAVE PROFILE
+  ===================================================== */
 
-const activity =
-activities.find(a => a.id === id);
+  async function saveProfile(event) {
 
-if(!activity) return;
+    event.preventDefault();
 
-if(activity.slots <= 0) {
 
-alert("Deze activiteit zit al vol.");
+    if (!currentUser) {
+      return;
+    }
 
-return;
 
-}
+    const isBusiness =
+      currentProfile.account_type ===
+      "BUSINESS";
 
-alert(
-`Je aanvraag voor "${activity.location}" is verstuurd! 🙌\n\n` +
-`De organisator moet je aanvraag eerst accepteren.`
-);
 
-}
+    const updates = {
 
+      location:
+        document
+          .getElementById("editLocation")
+          .value
+          .trim(),
 
-/* =========================
-   REQUESTS
-========================= */
+      bio:
+        document
+          .getElementById("editBio")
+          .value
+          .trim(),
 
-function renderRequests() {
+      updated_at:
+        new Date().toISOString()
 
-const container =
-document.getElementById("requestsList");
+    };
 
-if(requests.length === 0) {
 
-container.innerHTML = `
+    if (isBusiness) {
 
-<div class="empty">
-Geen openstaande aanvragen.
-</div>
+      updates.company_name =
+        document
+          .getElementById("editCompanyName")
+          .value
+          .trim();
 
-`;
+      updates.company_type =
+        document
+          .getElementById("editCompanyType")
+          .value;
 
-return;
+      updates.company_website =
+        document
+          .getElementById("editCompanyWebsite")
+          .value
+          .trim();
 
-}
+      updates.company_description =
+        document
+          .getElementById("editCompanyDescription")
+          .value
+          .trim();
 
-container.innerHTML =
-requests.map(request => `
+    } else {
 
-<div class="request">
+      updates.full_name =
+        document
+          .getElementById("editFullName")
+          .value
+          .trim();
 
-<div class="request-avatar">
-${request.name.charAt(0)}
-</div>
+      updates.username =
+        document
+          .getElementById("editUsername")
+          .value
+          .trim();
 
-<div class="request-info">
+      const age =
+        document
+          .getElementById("editAge")
+          .value;
 
-<strong>
-${request.name}, ${request.age}
-</strong>
+      updates.age =
+        age
+          ? Number(age)
+          : null;
 
-<p class="muted">
-📍 ${request.location}
-</p>
+    }
 
-<p style="margin-top:5px">
-"${request.message}"
-</p>
 
-</div>
+    const {
+      error
+    } = await supabaseClient
+      .from("profiles")
+      .update(updates)
+      .eq("id", currentUser.id);
 
-<div class="request-actions">
 
-<button
-class="btn btn-success btn-small"
-onclick="acceptRequest(${request.id})">
+    if (error) {
 
-✓
+      showMessage(
+        error.message,
+        "error"
+      );
 
-</button>
+      return;
+    }
 
-<button
-class="btn btn-danger btn-small"
-onclick="rejectRequest(${request.id})">
 
-✕
+    await loadCurrentProfile();
 
-</button>
+    showMessage(
+      "Profiel opgeslagen!",
+      "success"
+    );
 
-</div>
+    showPage("profilePage");
+  }
 
-</div>
 
-`).join("");
+  /* =====================================================
+     NAVIGATION STATE
+  ===================================================== */
 
-}
+  function updateNavigation() {
 
+    const loggedIn =
+      !!currentUser;
 
-function acceptRequest(id) {
 
-const request =
-requests.find(r => r.id === id);
+    document
+      .getElementById("loginNav")
+      .classList.toggle(
+        "hidden",
+        loggedIn
+      );
 
-if(!request) return;
 
-requests =
-requests.filter(r => r.id !== id);
+    document
+      .getElementById("logoutNav")
+      .classList.toggle(
+        "hidden",
+        !loggedIn
+      );
 
-renderRequests();
+  }
 
-alert(
-`${request.name} is toegevoegd aan je activiteit! 💬`
-);
 
-}
+  /* =====================================================
+     ESCAPE HTML
+  ===================================================== */
 
+  function escapeHTML(value) {
 
-function rejectRequest(id) {
+    if (value === null ||
+        value === undefined) {
+      return "";
+    }
 
-requests =
-requests.filter(r => r.id !== id);
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 
-renderRequests();
 
-}
+  /* =====================================================
+     INITIAL SESSION
+  ===================================================== */
 
+  async function initialize() {
 
-/* =========================
-   CHAT
-========================= */
+    const {
+      data
+    } =
+      await supabaseClient.auth.getSession();
 
-function sendMessage() {
 
-const input =
-document.getElementById("messageInput");
+    currentUser =
+      data.session?.user || null;
 
-const text =
-input.value.trim();
 
-if(!text) return;
+    if (currentUser) {
+      await loadCurrentProfile();
+    }
 
-const messages =
-document.getElementById("messages");
 
-messages.innerHTML += `
+    updateNavigation();
 
-<div class="message me">
 
-<div class="message-name">
-Jij
-</div>
+    supabaseClient.auth.onAuthStateChange(
+      async (
+        event,
+        session
+      ) => {
 
-${escapeHTML(text)}
+        currentUser =
+          session?.user || null;
 
-</div>
+        if (currentUser) {
+          await loadCurrentProfile();
+        } else {
+          currentProfile = null;
+        }
 
-`;
+        updateNavigation();
 
-input.value="";
+      }
+    );
 
-messages.scrollTop =
-messages.scrollHeight;
+  }
 
-}
 
-
-function escapeHTML(text) {
-
-const div =
-document.createElement("div");
-
-div.textContent=text;
-
-return div.innerHTML;
-
-}
-
-
-/* =========================
-   START
-========================= */
-
-renderHomeActivities();
-renderHomeEvents();
+  initialize();
 
 </script>
 
