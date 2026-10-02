@@ -23,6 +23,8 @@
     --border: #e8e8ef;
     --green: #36b37e;
     --red: #e55353;
+    --orange: #f59e0b;
+    --blue: #3b82f6;
 }
 
 body {
@@ -44,23 +46,22 @@ button {
     border: none;
 }
 
-/* HEADER */
-
 header {
     background: white;
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 50;
 }
 
 .header-inner {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: auto;
-    padding: 16px 20px;
+    padding: 15px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
 }
 
 .logo {
@@ -69,6 +70,7 @@ header {
     gap: 10px;
     font-size: 22px;
     font-weight: 800;
+    white-space: nowrap;
 }
 
 .logo-icon {
@@ -85,7 +87,8 @@ header {
 
 nav {
     display: flex;
-    gap: 5px;
+    gap: 4px;
+    overflow-x: auto;
 }
 
 nav button {
@@ -93,6 +96,7 @@ nav button {
     padding: 10px 12px;
     border-radius: 10px;
     color: var(--muted);
+    white-space: nowrap;
 }
 
 nav button:hover,
@@ -101,12 +105,10 @@ nav button.active {
     color: var(--purple);
 }
 
-/* MAIN */
-
 main {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: auto;
-    padding: 30px 20px 100px;
+    padding: 28px 20px 100px;
 }
 
 .page {
@@ -117,23 +119,39 @@ main {
     display: block;
 }
 
-/* HOME */
+/* HERO */
 
 .hero {
     background: linear-gradient(135deg, #6c4cff, #8c67ff);
     color: white;
     border-radius: 28px;
     padding: 45px;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero:after {
+    content: "🛍️";
+    position: absolute;
+    right: 50px;
+    bottom: -20px;
+    font-size: 150px;
+    opacity: .12;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
 }
 
 .hero h1 {
-    font-size: clamp(32px, 6vw, 56px);
+    font-size: clamp(34px, 6vw, 58px);
     margin-bottom: 15px;
 }
 
 .hero p {
-    max-width: 650px;
+    max-width: 680px;
     font-size: 18px;
     line-height: 1.6;
     opacity: .95;
@@ -145,6 +163,8 @@ main {
     flex-wrap: wrap;
     margin-top: 25px;
 }
+
+/* BUTTONS */
 
 .btn {
     padding: 13px 19px;
@@ -177,22 +197,58 @@ main {
     color: var(--green);
 }
 
+.btn-blue {
+    background: #edf5ff;
+    color: var(--blue);
+}
+
 .btn-small {
     padding: 9px 12px;
     font-size: 14px;
 }
 
+/* SEARCH BAR */
+
+.home-search {
+    background: white;
+    padding: 10px;
+    border-radius: 16px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border);
+}
+
+.home-search input {
+    border: none;
+    flex: 1;
+    padding: 12px;
+}
+
+.home-search input:focus {
+    border: none;
+}
+
 /* SECTIONS */
+
+.section {
+    margin-bottom: 35px;
+}
 
 .section-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     margin-bottom: 16px;
 }
 
 .section-title h2 {
     font-size: 24px;
+}
+
+.section-title p {
+    color: var(--muted);
 }
 
 /* CARDS */
@@ -218,28 +274,28 @@ main {
 }
 
 .activity-icon {
-    width: 52px;
-    height: 52px;
+    width: 55px;
+    height: 55px;
     border-radius: 16px;
     background: #f0edff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
+    font-size: 26px;
 }
 
 .activity-card h3 {
     font-size: 20px;
 }
 
-.muted {
-    color: var(--muted);
-    font-size: 14px;
-}
-
 .activity-description {
     line-height: 1.5;
     color: #555562;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 14px;
 }
 
 .tags {
@@ -255,7 +311,55 @@ main {
     font-size: 12px;
 }
 
-/* FORMS */
+.tag-purple {
+    background: #eeeaff;
+    color: var(--purple);
+}
+
+.tag-green {
+    background: #eaf9f2;
+    color: var(--green);
+}
+
+.tag-blue {
+    background: #edf5ff;
+    color: var(--blue);
+}
+
+/* HOME CATEGORY */
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 12px;
+}
+
+.category {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 17px 8px;
+    text-align: center;
+    transition: .2s;
+    cursor: pointer;
+}
+
+.category:hover {
+    transform: translateY(-3px);
+    border-color: var(--purple);
+}
+
+.category-icon {
+    font-size: 27px;
+    margin-bottom: 7px;
+}
+
+.category span {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* FORM */
 
 .form-card {
     max-width: 720px;
@@ -314,39 +418,191 @@ textarea {
 
 /* PROFILE */
 
-.profile-top {
+.profile-header {
+    background: linear-gradient(135deg, #6c4cff, #8c67ff);
+    color: white;
+    border-radius: 25px;
+    padding: 30px;
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
+    gap: 22px;
+    margin-bottom: 20px;
 }
 
 .avatar {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple), var(--pink));
-    color: white;
+    background: linear-gradient(135deg, #ffffff, #eeeaff);
+    color: var(--purple);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
+    font-size: 38px;
     font-weight: bold;
+    flex-shrink: 0;
+}
+
+.profile-header .muted {
+    color: rgba(255,255,255,.85);
 }
 
 .verification {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
     margin-top: 12px;
 }
 
 .verified {
-    background: #eaf9f2;
-    color: var(--green);
+    background: rgba(255,255,255,.18);
     padding: 7px 10px;
     border-radius: 999px;
     font-size: 13px;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat h2 {
+    font-size: 27px;
+}
+
+.reliability {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.progress {
+    background: #eeeeF4;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+    border-radius: 999px;
+}
+
+.badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    padding: 10px 13px;
+    border-radius: 12px;
+    background: #f5f3ff;
+    color: var(--purple);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* ACTIVITY DETAIL */
+
+.detail-header {
+    background: linear-gradient(135deg, #6c4cff, #8c67ff);
+    color: white;
+    border-radius: 25px;
+    padding: 35px;
+    margin-bottom: 20px;
+}
+
+.detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.detail-info {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.info-box {
+    background: #f7f7fb;
+    padding: 15px;
+    border-radius: 13px;
+}
+
+.organizer {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.small-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #eeeaff;
+    color: var(--purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* EVENTS */
+
+.event-banner {
+    background: linear-gradient(135deg,#111827,#374151);
+    color: white;
+    border-radius: 25px;
+    padding: 35px;
+    margin-bottom: 25px;
+}
+
+.event-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.event-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.event-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 17px;
+    background: #eeeaff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.org-badge {
+    background: #edf5ff;
+    color: var(--blue);
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.special-event {
+    border: 2px solid #eeeaff;
 }
 
 /* REQUESTS */
@@ -435,10 +691,6 @@ textarea {
     gap: 10px;
 }
 
-.chat-input input {
-    flex: 1;
-}
-
 /* EMPTY */
 
 .empty {
@@ -449,36 +701,55 @@ textarea {
 
 /* MOBILE */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
+
     .grid {
         grid-template-columns: 1fr 1fr;
     }
 
-    nav button span {
-        display: none;
+    .category-grid {
+        grid-template-columns: repeat(4,1fr);
     }
 
-    .hero {
-        padding: 30px;
+    .detail-layout {
+        grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 560px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
+@media (max-width: 650px) {
 
     main {
         padding: 20px 14px 100px;
     }
 
     .hero {
+        padding: 28px;
         border-radius: 20px;
-        padding: 25px;
     }
 
-    .profile-top {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-header {
         align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .reliability {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-info {
+        grid-template-columns: 1fr;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(4,1fr);
     }
 
     .request {
@@ -491,12 +762,20 @@ textarea {
         margin-left: 65px;
     }
 
-    nav {
-        gap: 0;
-    }
-
     nav button {
         padding: 8px;
+    }
+
+    nav button span {
+        display: none;
+    }
+
+    .header-inner {
+        padding: 12px;
+    }
+
+    .logo {
+        font-size: 18px;
     }
 }
 </style>
@@ -505,62 +784,192 @@ textarea {
 <body>
 
 <header>
-    <div class="header-inner">
 
-        <div class="logo">
-            <div class="logo-icon">🛍️</div>
-            ShoppingBuddy
-        </div>
+<div class="header-inner">
 
-        <nav>
-            <button onclick="showPage('home')" class="active">🏠 <span>Home</span></button>
-            <button onclick="showPage('search')">🔎 <span>Zoeken</span></button>
-            <button onclick="showPage('create')">➕ <span>Aanmaken</span></button>
-            <button onclick="showPage('chat')">💬 <span>Chat</span></button>
-            <button onclick="showPage('profile')">👤 <span>Profiel</span></button>
-        </nav>
+<div class="logo">
+<div class="logo-icon">🛍️</div>
+ShoppingBuddy
+</div>
 
-    </div>
+<nav>
+
+<button onclick="showPage('home')" class="active">
+🏠 <span>Home</span>
+</button>
+
+<button onclick="showPage('search')">
+🔎 <span>Zoeken</span>
+</button>
+
+<button onclick="showPage('events')">
+🎉 <span>Events</span>
+</button>
+
+<button onclick="showPage('create')">
+➕ <span>Aanmaken</span>
+</button>
+
+<button onclick="showPage('chat')">
+💬 <span>Chat</span>
+</button>
+
+<button onclick="showPage('profile')">
+👤 <span>Profiel</span>
+</button>
+
+</nav>
+
+</div>
+
 </header>
 
-
 <main>
+
 
 <!-- HOME -->
 
 <section id="home" class="page active">
 
-    <div class="hero">
+<div class="hero">
 
-        <h1>Niemand om mee te gaan?</h1>
+<div class="hero-content">
 
-        <p>
-            Vind iemand die samen met jou wil shoppen,
-            koffie drinken, naar de cinema gaan of gewoon
-            iets leuks wil doen.
-        </p>
+<h1>Ga samen.<br>Beleef meer.</h1>
 
-        <div class="hero-buttons">
-            <button class="btn btn-white" onclick="showPage('search')">
-                🔎 Activiteiten zoeken
-            </button>
+<p>
+Vind mensen om samen mee te shoppen, koffie te drinken,
+te eten, naar de cinema te gaan of gewoon iets leuks te doen.
+</p>
 
-            <button class="btn btn-white" onclick="showPage('create')">
-                ➕ Activiteit aanmaken
-            </button>
-        </div>
+<div class="hero-buttons">
 
-    </div>
+<button class="btn btn-white"
+onclick="showPage('search')">
+🔎 Vind een activiteit
+</button>
+
+<button class="btn btn-white"
+onclick="showPage('create')">
+➕ Maak activiteit
+</button>
+
+</div>
+
+</div>
+
+</div>
 
 
-    <div class="section-title">
-        <h2>Activiteiten bij jou in de buurt</h2>
-        <button class="btn btn-primary btn-small" onclick="showPage('search')">
-            Alles bekijken
-        </button>
-    </div>
+<div class="home-search">
 
-    <div id="homeActivities" class="grid"></div>
+<input
+id="homeSearch"
+placeholder="🔎 Waar wil je naartoe?"
+onkeydown="if(event.key==='Enter') searchFromHome()"
+>
+
+<button class="btn btn-primary"
+onclick="searchFromHome()">
+Zoeken
+</button>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+<h2>Wat wil je doen?</h2>
+</div>
+
+<div class="category-grid">
+
+<div class="category" onclick="filterCategory('Shoppen')">
+<div class="category-icon">🛍️</div>
+<span>Shoppen</span>
+</div>
+
+<div class="category" onclick="filterCategory('Koffie')">
+<div class="category-icon">☕</div>
+<span>Koffie</span>
+</div>
+
+<div class="category" onclick="filterCategory('Eten')">
+<div class="category-icon">🍔</div>
+<span>Eten</span>
+</div>
+
+<div class="category" onclick="filterCategory('Cinema')">
+<div class="category-icon">🎬</div>
+<span>Cinema</span>
+</div>
+
+<div class="category" onclick="filterCategory('Sport')">
+<div class="category-icon">🏋️</div>
+<span>Sport</span>
+</div>
+
+<div class="category" onclick="filterCategory('Gaming')">
+<div class="category-icon">🎮</div>
+<span>Gaming</span>
+</div>
+
+<div class="category" onclick="filterCategory('Concert')">
+<div class="category-icon">🎵</div>
+<span>Concert</span>
+</div>
+
+<div class="category" onclick="showPage('events')">
+<div class="category-icon">🎉</div>
+<span>Events</span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+
+<div>
+<h2>🔥 Populaire activiteiten</h2>
+<p>Ontdek wat er momenteel gebeurt</p>
+</div>
+
+<button class="btn btn-primary btn-small"
+onclick="showPage('search')">
+Alles bekijken
+</button>
+
+</div>
+
+<div id="homeActivities" class="grid"></div>
+
+</div>
+
+
+<div class="section">
+
+<div class="section-title">
+
+<div>
+<h2>🎉 Lokale events</h2>
+<p>Ontdek events georganiseerd door gemeenten en organisaties</p>
+</div>
+
+<button class="btn btn-primary btn-small"
+onclick="showPage('events')">
+Alle events
+</button>
+
+</div>
+
+<div id="homeEvents" class="grid"></div>
+
+</div>
 
 </section>
 
@@ -569,38 +978,89 @@ textarea {
 
 <section id="search" class="page">
 
-    <div class="section-title">
-        <h2>🔎 Activiteiten zoeken</h2>
-    </div>
+<div class="section-title">
+<h2>🔎 Activiteiten zoeken</h2>
+</div>
 
-    <div class="card" style="margin-bottom:20px">
+<div class="card" style="margin-bottom:20px">
 
-        <div class="form-group">
-            <label>Waar wil je naartoe?</label>
-            <input
-                id="searchInput"
-                type="text"
-                placeholder="bv. Wijnegem, Gent, Aalst..."
-                oninput="renderActivities()"
-            >
-        </div>
+<div class="form-group">
 
-        <div class="form-group">
-            <label>Wat wil je doen?</label>
+<label>Waar wil je naartoe?</label>
 
-            <select id="categoryFilter" onchange="renderActivities()">
-                <option value="">Alles</option>
-                <option value="Shoppen">🛍️ Shoppen</option>
-                <option value="Koffie">☕ Koffie</option>
-                <option value="Cinema">🎬 Cinema</option>
-                <option value="Eten">🍔 Eten</option>
-                <option value="Sport">🏋️ Sport</option>
-            </select>
-        </div>
+<input
+id="searchInput"
+type="text"
+placeholder="bv. Wijnegem, Gent, Aalst..."
+oninput="renderActivities()"
+>
 
-    </div>
+</div>
 
-    <div id="activitiesGrid" class="grid"></div>
+<div class="form-group">
+
+<label>Wat wil je doen?</label>
+
+<select id="categoryFilter"
+onchange="renderActivities()">
+
+<option value="">Alles</option>
+<option value="Shoppen">🛍️ Shoppen</option>
+<option value="Koffie">☕ Koffie</option>
+<option value="Cinema">🎬 Cinema</option>
+<option value="Eten">🍔 Eten</option>
+<option value="Sport">🏋️ Sport</option>
+<option value="Gaming">🎮 Gaming</option>
+<option value="Concert">🎵 Concert</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div id="activitiesGrid" class="grid"></div>
+
+</section>
+
+
+<!-- ACTIVITY DETAIL -->
+
+<section id="activityDetail" class="page">
+
+<div id="activityDetailContent"></div>
+
+</section>
+
+
+<!-- EVENTS -->
+
+<section id="events" class="page">
+
+<div class="event-banner">
+
+<h1>🎉 Special Events</h1>
+
+<p style="margin-top:10px;max-width:700px;line-height:1.6">
+
+Ontdek lokale evenementen georganiseerd door gemeenten,
+steden, verenigingen en andere organisaties.
+
+</p>
+
+</div>
+
+
+<div class="section-title">
+
+<div>
+<h2>📍 Events bij jou in de buurt</h2>
+<p>Officiële lokale evenementen</p>
+</div>
+
+</div>
+
+<div id="eventsGrid" class="grid"></div>
 
 </section>
 
@@ -609,84 +1069,120 @@ textarea {
 
 <section id="create" class="page">
 
-    <div class="section-title">
-        <h2>➕ Activiteit aanmaken</h2>
-    </div>
+<div class="section-title">
+<h2>➕ Activiteit aanmaken</h2>
+</div>
 
-    <div class="card form-card">
+<div class="card form-card">
 
-        <div class="form-group">
-            <label>Waar wil je naartoe?</label>
-            <input id="newLocation" placeholder="bv. Wijnegem Shopping">
-        </div>
+<div class="form-group">
 
-        <div class="form-group">
-            <label>Datum</label>
-            <input id="newDate" type="date">
-        </div>
+<label>Waar wil je naartoe?</label>
 
-        <div class="form-group">
-            <label>Uur</label>
-            <input id="newTime" type="time">
-        </div>
+<input
+id="newLocation"
+placeholder="bv. Wijnegem Shopping"
+>
 
-        <div class="form-group">
-            <label>Wat wil je doen?</label>
+</div>
 
-            <div class="checkbox-grid">
+<div class="form-group">
 
-                <label class="checkbox">
-                    <input type="checkbox" value="Shoppen" class="newCategory">
-                    🛍️ Shoppen
-                </label>
+<label>Datum</label>
 
-                <label class="checkbox">
-                    <input type="checkbox" value="Koffie" class="newCategory">
-                    ☕ Koffie
-                </label>
+<input id="newDate" type="date">
 
-                <label class="checkbox">
-                    <input type="checkbox" value="Cinema" class="newCategory">
-                    🎬 Cinema
-                </label>
+</div>
 
-                <label class="checkbox">
-                    <input type="checkbox" value="Eten" class="newCategory">
-                    🍔 Eten
-                </label>
+<div class="form-group">
 
-                <label class="checkbox">
-                    <input type="checkbox" value="Sport" class="newCategory">
-                    🏋️ Sport
-                </label>
+<label>Uur</label>
 
-            </div>
-        </div>
+<input id="newTime" type="time">
 
-        <div class="form-group">
-            <label>Hoeveel mensen mogen mee?</label>
-            <select id="newSlots">
-                <option value="1">1 persoon</option>
-                <option value="2" selected>2 personen</option>
-                <option value="3">3 personen</option>
-                <option value="4">4 personen</option>
-                <option value="5">5 personen</option>
-            </select>
-        </div>
+</div>
 
-        <div class="form-group">
-            <label>Extra informatie</label>
-            <textarea
-                id="newDescription"
-                placeholder="Vertel kort wat je van plan bent..."
-            ></textarea>
-        </div>
+<div class="form-group">
 
-        <button class="btn btn-primary" onclick="createActivity()">
-            🛍️ Activiteit plaatsen
-        </button>
+<label>Wat wil je doen?</label>
 
-    </div>
+<div class="checkbox-grid">
+
+<label class="checkbox">
+<input type="checkbox" value="Shoppen" class="newCategory">
+🛍️ Shoppen
+</label>
+
+<label class="checkbox">
+<input type="checkbox" value="Koffie" class="newCategory">
+☕ Koffie
+</label>
+
+<label class="checkbox">
+<input type="checkbox" value="Cinema" class="newCategory">
+🎬 Cinema
+</label>
+
+<label class="checkbox">
+<input type="checkbox" value="Eten" class="newCategory">
+🍔 Eten
+</label>
+
+<label class="checkbox">
+<input type="checkbox" value="Sport" class="newCategory">
+🏋️ Sport
+</label>
+
+<label class="checkbox">
+<input type="checkbox" value="Gaming" class="newCategory">
+🎮 Gaming
+</label>
+
+<label class="checkbox">
+<input type="checkbox" value="Concert" class="newCategory">
+🎵 Concert
+</label>
+
+</div>
+
+</div>
+
+<div class="form-group">
+
+<label>Hoeveel mensen mogen mee?</label>
+
+<select id="newSlots">
+
+<option value="1">1 persoon</option>
+<option value="2" selected>2 personen</option>
+<option value="3">3 personen</option>
+<option value="4">4 personen</option>
+<option value="5">5 personen</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Extra informatie</label>
+
+<textarea
+id="newDescription"
+placeholder="Vertel kort wat je van plan bent..."
+></textarea>
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="createActivity()">
+
+🛍️ Activiteit plaatsen
+
+</button>
+
+</div>
 
 </section>
 
@@ -695,52 +1191,144 @@ textarea {
 
 <section id="profile" class="page">
 
-    <div class="card">
+<div class="profile-header">
 
-        <div class="profile-top">
+<div class="avatar">S</div>
 
-            <div class="avatar">S</div>
+<div>
 
-            <div>
-                <h1>Sarah, 24</h1>
-                <p class="muted">📍 Aalst</p>
+<h1>Sarah, 24</h1>
 
-                <div class="verification">
-                    <span class="verified">✓ E-mail bevestigd</span>
-                    <span class="verified">✓ Telefoon bevestigd</span>
-                </div>
-            </div>
+<p class="muted">📍 Aalst</p>
 
-        </div>
+<div class="verification">
 
-        <h3>Over mij</h3>
+<span class="verified">✓ E-mail bevestigd</span>
 
-        <p class="activity-description" style="margin-top:8px">
-            Ik ga graag shoppen en vind het leuk om nieuwe mensen
-            te leren kennen.
-        </p>
+<span class="verified">✓ Telefoon bevestigd</span>
 
-    </div>
+<span class="verified">✓ Profiel bevestigd</span>
+
+</div>
+
+</div>
+
+</div>
 
 
-    <div class="grid" style="margin-top:20px">
+<div class="profile-stats">
 
-        <div class="card">
-            <h2>3</h2>
-            <p class="muted">Georganiseerd</p>
-        </div>
+<div class="card stat">
+<h2>3</h2>
+<p class="muted">Georganiseerd</p>
+</div>
 
-        <div class="card">
-            <h2>7</h2>
-            <p class="muted">Keer meegegaan</p>
-        </div>
+<div class="card stat">
+<h2>7</h2>
+<p class="muted">Meegegaan</p>
+</div>
 
-        <div class="card">
-            <h2>⭐ 5.0</h2>
-            <p class="muted">Beoordeling</p>
-        </div>
+<div class="card stat">
+<h2>5.0 ⭐</h2>
+<p class="muted">Beoordeling</p>
+</div>
 
-    </div>
+<div class="card stat">
+<h2>98%</h2>
+<p class="muted">Betrouwbaarheid</p>
+</div>
+
+</div>
+
+
+<div class="reliability">
+
+<div class="card">
+
+<h2>🛡️ Betrouwbaarheidsprofiel</h2>
+
+<p class="muted" style="margin-top:8px">
+Je betrouwbaarheid wordt opgebouwd door positieve ervaringen.
+</p>
+
+<div style="margin-top:20px">
+
+<strong>Op tijd aanwezig</strong>
+
+<div class="progress">
+<div class="progress-bar" style="width:98%"></div>
+</div>
+
+<p class="muted" style="margin-top:5px">98%</p>
+
+</div>
+
+<div style="margin-top:18px">
+
+<strong>Op afspraken aanwezig</strong>
+
+<div class="progress">
+<div class="progress-bar" style="width:96%"></div>
+</div>
+
+<p class="muted" style="margin-top:5px">96%</p>
+
+</div>
+
+<div style="margin-top:18px">
+
+<strong>Positieve beoordelingen</strong>
+
+<div class="progress">
+<div class="progress-bar" style="width:100%"></div>
+</div>
+
+<p class="muted" style="margin-top:5px">100%</p>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>🏆 Badges</h2>
+
+<div class="badges" style="margin-top:18px">
+
+<div class="badge">⭐ Betrouwbaar</div>
+<div class="badge">⏰ Komt op tijd</div>
+<div class="badge">😊 Sociaal</div>
+<div class="badge">🛍️ ShoppingBuddy</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card" style="margin-top:20px">
+
+<h2>Over mij</h2>
+
+<p class="activity-description" style="margin-top:10px">
+
+Ik ga graag shoppen en vind het leuk om nieuwe mensen
+te leren kennen.
+
+</p>
+
+<div class="tags" style="margin-top:15px">
+
+<span class="tag tag-purple">🛍️ Shoppen</span>
+<span class="tag">☕ Koffie</span>
+<span class="tag">🎬 Cinema</span>
+<span class="tag">🍔 Eten</span>
+
+</div>
+
+</div>
 
 </section>
 
@@ -749,21 +1337,21 @@ textarea {
 
 <section id="requests" class="page">
 
-    <div class="section-title">
-        <h2>👥 Aanvragen beheren</h2>
-    </div>
+<div class="section-title">
+<h2>👥 Aanvragen beheren</h2>
+</div>
 
-    <div class="card">
+<div class="card">
 
-        <h2>🛍️ Wijnegem Shopping</h2>
+<h2>🛍️ Wijnegem Shopping</h2>
 
-        <p class="muted" style="margin-top:5px">
-            Zaterdag · 14:00 · nog 2 plaatsen
-        </p>
+<p class="muted" style="margin-top:5px">
+Zaterdag · 14:00 · nog 2 plaatsen
+</p>
 
-        <div id="requestsList"></div>
+<div id="requestsList"></div>
 
-    </div>
+</div>
 
 </section>
 
@@ -772,52 +1360,65 @@ textarea {
 
 <section id="chat" class="page">
 
-    <div class="chat-container">
+<div class="chat-container">
 
-        <div class="chat-header">
+<div class="chat-header">
 
-            <h2>🛍️ Wijnegem Shopping</h2>
+<h2>🛍️ Wijnegem Shopping</h2>
 
-            <p class="muted">
-                Zaterdag · 14:00 · Wijnegem
-            </p>
+<p class="muted">
+Zaterdag · 14:00 · Wijnegem
+</p>
 
-        </div>
+</div>
 
-        <div id="messages" class="messages">
+<div id="messages" class="messages">
 
-            <div class="message">
-                <div class="message-name">Sarah</div>
-                Zullen we om 14u aan de hoofdingang afspreken?
-            </div>
+<div class="message">
 
-            <div class="message">
-                <div class="message-name">Lisa</div>
-                Ja perfect 😊
-            </div>
+<div class="message-name">Sarah</div>
 
-            <div class="message me">
-                <div class="message-name">Jij</div>
-                Voor mij ook!
-            </div>
+Zullen we om 14u aan de hoofdingang afspreken?
 
-        </div>
+</div>
 
-        <div class="chat-input">
+<div class="message">
 
-            <input
-                id="messageInput"
-                placeholder="Typ een bericht..."
-                onkeydown="if(event.key==='Enter') sendMessage()"
-            >
+<div class="message-name">Lisa</div>
 
-            <button class="btn btn-primary" onclick="sendMessage()">
-                Verstuur
-            </button>
+Ja perfect 😊
 
-        </div>
+</div>
 
-    </div>
+<div class="message me">
+
+<div class="message-name">Jij</div>
+
+Voor mij ook!
+
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+id="messageInput"
+placeholder="Typ een bericht..."
+onkeydown="if(event.key==='Enter') sendMessage()"
+>
+
+<button
+class="btn btn-primary"
+onclick="sendMessage()">
+
+Verstuur
+
+</button>
+
+</div>
+
+</div>
 
 </section>
 
@@ -826,499 +1427,985 @@ textarea {
 
 <script>
 
+/* =========================
+   ACTIVITIES
+========================= */
+
 let activities = [
 
-    {
-        id: 1,
-        location: "Wijnegem Shopping",
-        date: "2026-10-03",
-        time: "14:00",
-        categories: ["Shoppen", "Koffie"],
-        person: "Sarah",
-        age: 24,
-        slots: 2,
-        description: "Ik wil vooral kledingwinkels doen en daarna iets drinken."
-    },
+{
+id:1,
+location:"Wijnegem Shopping",
+date:"2026-10-03",
+time:"14:00",
+categories:["Shoppen","Koffie"],
+person:"Sarah",
+age:24,
+slots:2,
+description:"Ik wil vooral kledingwinkels doen en daarna iets drinken.",
+rating:"5.0",
+reliability:98
+},
 
-    {
-        id: 2,
-        location: "Gent Zuid",
-        date: "2026-10-03",
-        time: "13:30",
-        categories: ["Shoppen"],
-        person: "Jonas",
-        age: 27,
-        slots: 1,
-        description: "Gewoon gezellig samen shoppen."
-    },
+{
+id:2,
+location:"Gent Zuid",
+date:"2026-10-03",
+time:"13:30",
+categories:["Shoppen"],
+person:"Jonas",
+age:27,
+slots:1,
+description:"Gewoon gezellig samen shoppen.",
+rating:"4.8",
+reliability:95
+},
 
-    {
-        id: 3,
-        location: "Aalst",
-        date: "2026-10-04",
-        time: "15:00",
-        categories: ["Koffie"],
-        person: "Emma",
-        age: 25,
-        slots: 2,
-        description: "Samen koffie drinken en wat bijpraten."
-    }
+{
+id:3,
+location:"Aalst",
+date:"2026-10-04",
+time:"15:00",
+categories:["Koffie"],
+person:"Emma",
+age:25,
+slots:2,
+description:"Samen koffie drinken en wat bijpraten.",
+rating:"4.9",
+reliability:97
+},
+
+{
+id:4,
+location:"Aalst Centrum",
+date:"2026-10-05",
+time:"18:30",
+categories:["Eten"],
+person:"Lisa",
+age:23,
+slots:3,
+description:"Samen iets gaan eten en daarna misschien nog een drankje.",
+rating:"5.0",
+reliability:99
+}
 
 ];
 
+
+/* =========================
+   SPECIAL EVENTS
+========================= */
+
+let events = [
+
+{
+id:1,
+title:"Parkconcert Aalst",
+date:"2026-10-04",
+time:"19:30",
+location:"Stadspark Aalst",
+organization:"Stad Aalst",
+type:"Gemeente",
+icon:"🎵",
+description:"Een gezellige zomeravond met live muziek in het stadspark.",
+free:true
+},
+
+{
+id:2,
+title:"Herfstmarkt",
+date:"2026-10-10",
+time:"10:00",
+location:"Markt Lede",
+organization:"Gemeente Lede",
+type:"Gemeente",
+icon:"🍂",
+description:"Lokale markt met standhouders, muziek en activiteiten.",
+free:true
+},
+
+{
+id:3,
+title:"Shopping Night",
+date:"2026-10-16",
+time:"18:00",
+location:"Centrum Dendermonde",
+organization:"Dendermonde Events",
+type:"Organisatie",
+icon:"🛍️",
+description:"Avondshopping met winkels, animatie en speciale acties.",
+free:true
+}
+
+];
+
+
+/* =========================
+   REQUESTS
+========================= */
 
 let requests = [
 
-    {
-        id: 1,
-        name: "Lisa",
-        age: 23,
-        location: "Aalst",
-        message: "Lijkt me gezellig!"
-    },
+{
+id:1,
+name:"Lisa",
+age:23,
+location:"Aalst",
+message:"Lijkt me gezellig!"
+},
 
-    {
-        id: 2,
-        name: "Emma",
-        age: 25,
-        location: "Dendermonde",
-        message: "Ik zou graag meegaan."
-    },
+{
+id:2,
+name:"Emma",
+age:25,
+location:"Dendermonde",
+message:"Ik zou graag meegaan."
+},
 
-    {
-        id: 3,
-        name: "Tom",
-        age: 29,
-        location: "Gent",
-        message: "Ik ben zaterdag beschikbaar."
-    }
+{
+id:3,
+name:"Tom",
+age:29,
+location:"Gent",
+message:"Ik ben zaterdag beschikbaar."
+}
 
 ];
 
 
+/* =========================
+   NAVIGATION
+========================= */
+
 function showPage(pageId) {
 
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
+document.querySelectorAll(".page").forEach(page => {
+page.classList.remove("active");
+});
 
-    const page = document.getElementById(pageId);
+const page = document.getElementById(pageId);
 
-    if(page) {
-        page.classList.add("active");
-    }
+if(page) {
+page.classList.add("active");
+}
 
-    document.querySelectorAll("nav button").forEach(button => {
-        button.classList.remove("active");
-    });
+document.querySelectorAll("nav button").forEach(button => {
+button.classList.remove("active");
+});
 
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 
-    if(pageId === "search") {
-        renderActivities();
-    }
+if(pageId === "search") {
+renderActivities();
+}
 
-    if(pageId === "home") {
-        renderHomeActivities();
-    }
+if(pageId === "home") {
+renderHomeActivities();
+renderHomeEvents();
+}
 
-    if(pageId === "requests") {
-        renderRequests();
-    }
+if(pageId === "events") {
+renderEvents();
+}
+
+if(pageId === "requests") {
+renderRequests();
+}
 
 }
 
+
+/* =========================
+   DATES
+========================= */
 
 function formatDate(date) {
 
-    if(!date) return "";
+if(!date) return "";
 
-    const d = new Date(date + "T00:00:00");
+const d = new Date(date + "T00:00:00");
 
-    return d.toLocaleDateString("nl-BE", {
-        weekday: "short",
-        day: "numeric",
-        month: "long"
-    });
+return d.toLocaleDateString("nl-BE", {
+weekday:"short",
+day:"numeric",
+month:"long"
+});
 
 }
 
+
+/* =========================
+   ICON
+========================= */
 
 function categoryIcon(categories) {
 
-    if(categories.includes("Shoppen")) return "🛍️";
-    if(categories.includes("Koffie")) return "☕";
-    if(categories.includes("Cinema")) return "🎬";
-    if(categories.includes("Eten")) return "🍔";
-    if(categories.includes("Sport")) return "🏋️";
+if(categories.includes("Shoppen")) return "🛍️";
+if(categories.includes("Koffie")) return "☕";
+if(categories.includes("Cinema")) return "🎬";
+if(categories.includes("Eten")) return "🍔";
+if(categories.includes("Sport")) return "🏋️";
+if(categories.includes("Gaming")) return "🎮";
+if(categories.includes("Concert")) return "🎵";
 
-    return "✨";
+return "✨";
+
 }
 
+
+/* =========================
+   ACTIVITY CARD
+========================= */
 
 function activityHTML(activity) {
 
-    return `
+return `
 
-        <div class="card activity-card">
+<div class="card activity-card">
 
-            <div class="activity-icon">
-                ${categoryIcon(activity.categories)}
-            </div>
+<div class="activity-icon">
+${categoryIcon(activity.categories)}
+</div>
 
-            <div>
+<div>
 
-                <h3>${activity.location}</h3>
+<h3>${activity.location}</h3>
 
-                <p class="muted">
-                    📅 ${formatDate(activity.date)}
-                    · 🕐 ${activity.time}
-                </p>
+<p class="muted">
+📅 ${formatDate(activity.date)}
+· 🕐 ${activity.time}
+</p>
 
-            </div>
+</div>
 
-            <div class="tags">
+<div class="tags">
 
-                ${activity.categories.map(category =>
-                    `<span class="tag">${category}</span>`
-                ).join("")}
+${activity.categories.map(category =>
+`<span class="tag">${category}</span>`
+).join("")}
 
-            </div>
+</div>
 
-            <p class="activity-description">
-                ${activity.description}
-            </p>
+<p class="activity-description">
+${activity.description}
+</p>
 
-            <p class="muted">
-                👤 ${activity.person}, ${activity.age}
-                · 👥 nog ${activity.slots} plaats${activity.slots === 1 ? "" : "en"}
-            </p>
+<p class="muted">
+👤 ${activity.person}, ${activity.age}
+· 👥 nog ${activity.slots}
+plaats${activity.slots === 1 ? "" : "en"}
+</p>
 
-            <button
-                class="btn btn-primary"
-                onclick="joinActivity(${activity.id})"
-            >
-                Ik wil mee
-            </button>
+<div class="tags">
 
-        </div>
+<span class="tag tag-purple">
+⭐ ${activity.rating || "Nieuw"}
+</span>
 
-    `;
+<span class="tag tag-green">
+🛡️ ${activity.reliability || 0}%
+</span>
+
+</div>
+
+<button
+class="btn btn-primary"
+onclick="openActivity(${activity.id})">
+
+Bekijk activiteit
+
+</button>
+
+</div>
+
+`;
 
 }
 
+
+/* =========================
+   HOME
+========================= */
 
 function renderHomeActivities() {
 
-    const container = document.getElementById("homeActivities");
+const container =
+document.getElementById("homeActivities");
 
-    container.innerHTML = activities
-        .slice(0, 3)
-        .map(activityHTML)
-        .join("");
+container.innerHTML =
+activities.slice(0,3)
+.map(activityHTML)
+.join("");
 
 }
 
+
+function renderHomeEvents() {
+
+const container =
+document.getElementById("homeEvents");
+
+container.innerHTML =
+events.slice(0,3)
+.map(eventHTML)
+.join("");
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
 
 function renderActivities() {
 
-    const container = document.getElementById("activitiesGrid");
+const container =
+document.getElementById("activitiesGrid");
 
-    const search = document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase();
+const search =
+(document.getElementById("searchInput").value || "")
+.toLowerCase();
 
-    const category = document
-        .getElementById("categoryFilter")
-        .value;
+const category =
+document.getElementById("categoryFilter").value;
 
-    const filtered = activities.filter(activity => {
+const filtered =
+activities.filter(activity => {
 
-        const locationMatch =
-            activity.location.toLowerCase().includes(search);
+const locationMatch =
+activity.location
+.toLowerCase()
+.includes(search);
 
-        const categoryMatch =
-            !category ||
-            activity.categories.includes(category);
+const categoryMatch =
+!category ||
+activity.categories.includes(category);
 
-        return locationMatch && categoryMatch;
+return locationMatch && categoryMatch;
 
-    });
-
-
-    if(filtered.length === 0) {
-
-        container.innerHTML = `
-            <div class="card empty">
-                <h3>Geen activiteiten gevonden 😕</h3>
-                <p style="margin-top:8px">
-                    Misschien kun je zelf een activiteit aanmaken.
-                </p>
-            </div>
-        `;
-
-        return;
-    }
+});
 
 
-    container.innerHTML =
-        filtered.map(activityHTML).join("");
+if(filtered.length === 0) {
+
+container.innerHTML = `
+
+<div class="card empty">
+
+<h3>Geen activiteiten gevonden 😕</h3>
+
+<p style="margin-top:8px">
+Misschien kun je zelf een activiteit aanmaken.
+</p>
+
+</div>
+
+`;
+
+return;
 
 }
 
+container.innerHTML =
+filtered.map(activityHTML).join("");
+
+}
+
+
+function searchFromHome() {
+
+const value =
+document.getElementById("homeSearch").value;
+
+showPage("search");
+
+document.getElementById("searchInput").value = value;
+
+renderActivities();
+
+}
+
+
+function filterCategory(category) {
+
+showPage("search");
+
+document.getElementById("categoryFilter").value =
+category;
+
+renderActivities();
+
+}
+
+
+/* =========================
+   ACTIVITY DETAIL
+========================= */
+
+function openActivity(id) {
+
+const activity =
+activities.find(a => a.id === id);
+
+if(!activity) return;
+
+const container =
+document.getElementById("activityDetailContent");
+
+container.innerHTML = `
+
+<div class="detail-header">
+
+<div class="tags">
+
+${activity.categories.map(category =>
+`<span class="tag"
+style="background:rgba(255,255,255,.18);color:white">
+${category}
+</span>`
+).join("")}
+
+</div>
+
+<h1 style="margin-top:15px">
+${categoryIcon(activity.categories)}
+${activity.location}
+</h1>
+
+<p style="margin-top:8px;opacity:.9">
+Een ShoppingBuddy activiteit
+</p>
+
+</div>
+
+
+<div class="detail-layout">
+
+<div>
+
+<div class="card">
+
+<h2>Over deze activiteit</h2>
+
+<p class="activity-description"
+style="margin-top:12px">
+
+${activity.description}
+
+</p>
+
+<div class="detail-info">
+
+<div class="info-box">
+<strong>📅 Datum</strong>
+<p class="muted">${formatDate(activity.date)}</p>
+</div>
+
+<div class="info-box">
+<strong>🕐 Uur</strong>
+<p class="muted">${activity.time}</p>
+</div>
+
+<div class="info-box">
+<strong>📍 Locatie</strong>
+<p class="muted">${activity.location}</p>
+</div>
+
+<div class="info-box">
+<strong>👥 Plaatsen</strong>
+<p class="muted">${activity.slots} beschikbaar</p>
+</div>
+
+</div>
+
+<button
+class="btn btn-primary"
+style="width:100%"
+onclick="joinActivity(${activity.id})">
+
+🙋 Ik wil mee
+
+</button>
+
+</div>
+
+
+<div class="card" style="margin-top:20px">
+
+<h2>👤 Organisator</h2>
+
+<div class="organizer" style="margin-top:15px">
+
+<div class="small-avatar">
+${activity.person.charAt(0)}
+</div>
+
+<div>
+
+<strong>
+${activity.person}, ${activity.age}
+</strong>
+
+<p class="muted">
+📍 Aalst
+</p>
+
+</div>
+
+</div>
+
+<div class="tags" style="margin-top:15px">
+
+<span class="tag tag-purple">
+⭐ ${activity.rating}
+</span>
+
+<span class="tag tag-green">
+🛡️ ${activity.reliability}% betrouwbaar
+</span>
+
+</div>
+
+<button
+class="btn btn-blue btn-small"
+style="margin-top:15px"
+onclick="showPage('profile')">
+
+Bekijk profiel
+
+</button>
+
+</div>
+
+</div>
+
+
+<div>
+
+<div class="card">
+
+<h3>🛡️ Veilig afspreken</h3>
+
+<p class="muted"
+style="margin-top:10px;line-height:1.6">
+
+Spreek af op een openbare plaats.
+De organisator bepaalt wie wordt toegelaten.
+
+</p>
+
+</div>
+
+<div class="card" style="margin-top:15px">
+
+<button
+class="btn"
+style="width:100%;background:#f3f3f7"
+onclick="alert('Activiteit opgeslagen bij je favorieten ❤️')">
+
+♡ Bewaren
+
+</button>
+
+<button
+class="btn btn-danger"
+style="width:100%;margin-top:10px"
+onclick="alert('Bedankt. De activiteit wordt gerapporteerd.')">
+
+⚠️ Rapporteren
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+showPage("activityDetail");
+
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+
+function eventHTML(event) {
+
+return `
+
+<div class="card event-card special-event">
+
+<div class="event-icon">
+${event.icon}
+</div>
+
+<div class="event-card-top">
+
+<div>
+
+<h3>${event.title}</h3>
+
+<p class="muted" style="margin-top:5px">
+📅 ${formatDate(event.date)}
+· 🕐 ${event.time}
+</p>
+
+</div>
+
+<span class="org-badge">
+🏛️ ${event.type}
+</span>
+
+</div>
+
+<p class="activity-description"
+style="margin-top:12px">
+
+${event.description}
+
+</p>
+
+<div class="tags" style="margin-top:12px">
+
+<span class="tag">
+📍 ${event.location}
+</span>
+
+<span class="tag tag-blue">
+✓ ${event.organization}
+</span>
+
+${event.free
+? `<span class="tag tag-green">Gratis</span>`
+: ""}
+
+</div>
+
+<button
+class="btn btn-primary"
+style="width:100%;margin-top:15px"
+onclick="openEvent(${event.id})">
+
+Bekijk event
+
+</button>
+
+</div>
+
+`;
+
+}
+
+
+function renderEvents() {
+
+const container =
+document.getElementById("eventsGrid");
+
+container.innerHTML =
+events.map(eventHTML).join("");
+
+}
+
+
+function openEvent(id) {
+
+const event =
+events.find(e => e.id === id);
+
+if(!event) return;
+
+alert(
+`${event.title}\n\n` +
+`${formatDate(event.date)} · ${event.time}\n` +
+`${event.location}\n\n` +
+`${event.description}\n\n` +
+`Georganiseerd door: ${event.organization}`
+);
+
+}
+
+
+/* =========================
+   CREATE ACTIVITY
+========================= */
 
 function createActivity() {
 
-    const location =
-        document.getElementById("newLocation").value.trim();
+const location =
+document.getElementById("newLocation").value.trim();
 
-    const date =
-        document.getElementById("newDate").value;
+const date =
+document.getElementById("newDate").value;
 
-    const time =
-        document.getElementById("newTime").value;
+const time =
+document.getElementById("newTime").value;
 
-    const slots =
-        Number(document.getElementById("newSlots").value);
+const slots =
+Number(document.getElementById("newSlots").value);
 
-    const description =
-        document.getElementById("newDescription").value.trim();
+const description =
+document.getElementById("newDescription").value.trim();
 
-
-    const categories =
-        [...document.querySelectorAll(".newCategory:checked")]
-        .map(input => input.value);
-
-
-    if(!location || !date || !time || categories.length === 0) {
-
-        alert("Vul minstens de locatie, datum, uur en activiteit in.");
-
-        return;
-    }
+const categories =
+[...document.querySelectorAll(".newCategory:checked")]
+.map(input => input.value);
 
 
-    const newActivity = {
+if(!location || !date || !time || categories.length === 0) {
 
-        id: Date.now(),
+alert(
+"Vul minstens de locatie, datum, uur en activiteit in."
+);
 
-        location,
-
-        date,
-
-        time,
-
-        categories,
-
-        person: "Jij",
-
-        age: 24,
-
-        slots,
-
-        description:
-            description ||
-            "Nieuwe ShoppingBuddy activiteit."
-
-    };
-
-
-    activities.unshift(newActivity);
-
-
-    document.getElementById("newLocation").value = "";
-    document.getElementById("newDate").value = "";
-    document.getElementById("newTime").value = "";
-    document.getElementById("newDescription").value = "";
-
-    document.querySelectorAll(".newCategory")
-        .forEach(input => input.checked = false);
-
-
-    alert("Je activiteit is geplaatst! 🛍️");
-
-    showPage("search");
+return;
 
 }
 
+
+const newActivity = {
+
+id:Date.now(),
+
+location,
+
+date,
+
+time,
+
+categories,
+
+person:"Jij",
+
+age:24,
+
+slots,
+
+description:
+description ||
+"Nieuwe ShoppingBuddy activiteit.",
+
+rating:"Nieuw",
+
+reliability:100
+
+};
+
+
+activities.unshift(newActivity);
+
+
+document.getElementById("newLocation").value="";
+document.getElementById("newDate").value="";
+document.getElementById("newTime").value="";
+document.getElementById("newDescription").value="";
+
+document.querySelectorAll(".newCategory")
+.forEach(input => input.checked=false);
+
+
+alert("Je activiteit is geplaatst! 🛍️");
+
+openActivity(newActivity.id);
+
+}
+
+
+/* =========================
+   JOIN
+========================= */
 
 function joinActivity(id) {
 
-    const activity =
-        activities.find(a => a.id === id);
+const activity =
+activities.find(a => a.id === id);
 
-    if(!activity) return;
+if(!activity) return;
 
+if(activity.slots <= 0) {
 
-    if(activity.slots <= 0) {
+alert("Deze activiteit zit al vol.");
 
-        alert("Deze activiteit zit al vol.");
+return;
 
-        return;
-    }
+}
 
-
-    alert(
-        `Je aanvraag voor "${activity.location}" is verstuurd! 🙌\n\nDe organisator moet je aanvraag eerst accepteren.`
-    );
+alert(
+`Je aanvraag voor "${activity.location}" is verstuurd! 🙌\n\n` +
+`De organisator moet je aanvraag eerst accepteren.`
+);
 
 }
 
 
+/* =========================
+   REQUESTS
+========================= */
+
 function renderRequests() {
 
-    const container =
-        document.getElementById("requestsList");
+const container =
+document.getElementById("requestsList");
 
+if(requests.length === 0) {
 
-    if(requests.length === 0) {
+container.innerHTML = `
 
-        container.innerHTML = `
-            <div class="empty">
-                Geen openstaande aanvragen.
-            </div>
-        `;
+<div class="empty">
+Geen openstaande aanvragen.
+</div>
 
-        return;
-    }
+`;
 
+return;
 
-    container.innerHTML = requests.map(request => `
+}
 
-        <div class="request" id="request-${request.id}">
+container.innerHTML =
+requests.map(request => `
 
-            <div class="request-avatar">
-                ${request.name.charAt(0)}
-            </div>
+<div class="request">
 
-            <div class="request-info">
+<div class="request-avatar">
+${request.name.charAt(0)}
+</div>
 
-                <strong>
-                    ${request.name}, ${request.age}
-                </strong>
+<div class="request-info">
 
-                <p class="muted">
-                    📍 ${request.location}
-                </p>
+<strong>
+${request.name}, ${request.age}
+</strong>
 
-                <p style="margin-top:5px">
-                    "${request.message}"
-                </p>
+<p class="muted">
+📍 ${request.location}
+</p>
 
-            </div>
+<p style="margin-top:5px">
+"${request.message}"
+</p>
 
-            <div class="request-actions">
+</div>
 
-                <button
-                    class="btn btn-success btn-small"
-                    onclick="acceptRequest(${request.id})"
-                >
-                    ✓
-                </button>
+<div class="request-actions">
 
-                <button
-                    class="btn btn-danger btn-small"
-                    onclick="rejectRequest(${request.id})"
-                >
-                    ✕
-                </button>
+<button
+class="btn btn-success btn-small"
+onclick="acceptRequest(${request.id})">
 
-            </div>
+✓
 
-        </div>
+</button>
 
-    `).join("");
+<button
+class="btn btn-danger btn-small"
+onclick="rejectRequest(${request.id})">
+
+✕
+
+</button>
+
+</div>
+
+</div>
+
+`).join("");
 
 }
 
 
 function acceptRequest(id) {
 
-    const request =
-        requests.find(r => r.id === id);
+const request =
+requests.find(r => r.id === id);
 
-    if(!request) return;
+if(!request) return;
 
+requests =
+requests.filter(r => r.id !== id);
 
-    requests =
-        requests.filter(r => r.id !== id);
+renderRequests();
 
-    renderRequests();
-
-    alert(
-        `${request.name} is toegevoegd aan je activiteit! 💬`
-    );
+alert(
+`${request.name} is toegevoegd aan je activiteit! 💬`
+);
 
 }
 
 
 function rejectRequest(id) {
 
-    requests =
-        requests.filter(r => r.id !== id);
+requests =
+requests.filter(r => r.id !== id);
 
-    renderRequests();
+renderRequests();
 
 }
 
 
+/* =========================
+   CHAT
+========================= */
+
 function sendMessage() {
 
-    const input =
-        document.getElementById("messageInput");
+const input =
+document.getElementById("messageInput");
 
-    const text =
-        input.value.trim();
+const text =
+input.value.trim();
 
-    if(!text) return;
+if(!text) return;
 
+const messages =
+document.getElementById("messages");
 
-    const messages =
-        document.getElementById("messages");
+messages.innerHTML += `
 
+<div class="message me">
 
-    messages.innerHTML += `
+<div class="message-name">
+Jij
+</div>
 
-        <div class="message me">
+${escapeHTML(text)}
 
-            <div class="message-name">
-                Jij
-            </div>
+</div>
 
-            ${escapeHTML(text)}
+`;
 
-        </div>
+input.value="";
 
-    `;
-
-
-    input.value = "";
-
-    messages.scrollTop =
-        messages.scrollHeight;
+messages.scrollTop =
+messages.scrollHeight;
 
 }
 
 
 function escapeHTML(text) {
 
-    const div =
-        document.createElement("div");
+const div =
+document.createElement("div");
 
-    div.textContent = text;
+div.textContent=text;
 
-    return div.innerHTML;
+return div.innerHTML;
 
 }
 
 
-/* START */
+/* =========================
+   START
+========================= */
 
 renderHomeActivities();
+renderHomeEvents();
 
 </script>
 
