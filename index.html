@@ -949,6 +949,7 @@ header {
 }
 
 </style>
+<link rel="stylesheet" href="shopping-routes.css">
 </head>
 
 <body>
@@ -1183,6 +1184,30 @@ header {
 
 </section>
 
+
+<!-- SHOPPING ROUTES -->
+<section id="routesPage" class="page">
+ <div class="routes-hero"><div><span class="routes-eyebrow">SHOPPINGBUDDY • SAMEN OP PAD</span><h1>Ontdek. Shop. <span>Beleef samen.</span></h1><p>Maak je eigen shoppingroute, kies je favoriete winkels en nodig anderen uit om mee te gaan.</p></div><div class="routes-hero-icon">🛍️</div></div>
+ <div class="routes-layout">
+  <div class="routes-main">
+   <div class="section-header"><div><h2>Shopping routes</h2><p class="muted">Ontdek routes van andere ShoppingBuddies of sluit je aan.</p></div><button class="primary-btn" onclick="document.getElementById('routeCreateCard').scrollIntoView({behavior:'smooth'})">＋ Maak een route</button></div>
+   <div id="shoppingRoutesList" class="routes-grid"><div class="card route-empty">Shoppingroutes laden...</div></div>
+   <div class="section routes-stores-section"><div class="section-header"><div><h2>Ontdek winkels</h2><p class="muted">Populaire winkels om in je route op te nemen.</p></div></div><div id="shoppingStoresGrid" class="stores-grid"></div></div>
+  </div>
+  <aside class="card route-create-card" id="routeCreateCard">
+   <div class="route-create-heading"><span class="route-create-icon">✦</span><div><h2>Plan een shoppingroute</h2><p class="muted small">Stel je uitstap samen en laat anderen aansluiten.</p></div></div>
+   <div class="form-group"><label for="routeTitle">Naam van je route</label><input id="routeTitle" maxlength="70" placeholder="Bijvoorbeeld: Shopnamiddag in Gent"></div>
+   <div class="form-group"><label for="routeCity">Stad of winkelcentrum</label><input id="routeCity" maxlength="100" placeholder="Bijvoorbeeld: Gent centrum"></div>
+   <div class="form-group"><label for="routeMeeting">Afspreekpunt</label><input id="routeMeeting" maxlength="150" placeholder="Bijvoorbeeld: ingang station"></div>
+   <div class="route-form-row"><div class="form-group"><label for="routeDate">Datum</label><input id="routeDate" type="date"></div><div class="form-group"><label for="routeTime">Startuur</label><input id="routeTime" type="time"></div></div>
+   <div class="form-group"><label for="routeMax">Maximum deelnemers</label><select id="routeMax"><option value="2">2 personen</option><option value="3">3 personen</option><option value="4" selected>4 personen</option><option value="5">5 personen</option><option value="6">6 personen</option><option value="8">8 personen</option><option value="10">10 personen</option><option value="12">12 personen</option></select></div>
+   <div class="form-group"><label>Welke winkels wil je bezoeken?</label><p class="small muted" style="margin-bottom:9px">Selecteer één of meerdere winkels.</p><div id="routeStoreChoices" class="route-store-choices"></div></div>
+   <div class="form-group"><label for="routeDescription">Extra info</label><textarea id="routeDescription" rows="3" maxlength="500" placeholder="Wat staat er op de planning?"></textarea></div>
+   <button id="createRouteButton" class="primary-btn" style="width:100%;margin-top:20px" onclick="createShoppingRoute()">Route publiceren</button>
+   <p class="small muted" style="margin-top:12px;line-height:1.5">Je route wordt zichtbaar voor ingelogde ShoppingBuddies. Gebruik een openbaar afspreekpunt.</p>
+  </aside>
+ </div>
+</section>
 
 <!-- =========================
      ACTIVITY DETAIL
@@ -1618,6 +1643,7 @@ header {
 <div id="toast" class="toast hidden"></div>
 
 
+<script src="shopping-routes.js"></script>
 <script>
 
 /* =====================================================
@@ -1899,6 +1925,10 @@ function showPage(pageId) {
 
     if (pageId === "profilePage") {
         renderProfile();
+    }
+    if (pageId === "routesPage") {
+        renderStoreDirectory();
+        loadShoppingRoutes();
     }
 }
 
@@ -3614,6 +3644,11 @@ function updateNavigation() {
 
         `;
     }
+    const routesButton = document.createElement("button");
+    routesButton.className = "nav-btn";
+    routesButton.textContent = "🛍️ Shopping routes";
+    routesButton.onclick = () => showPage("routesPage");
+    nav.insertBefore(routesButton, nav.children[2] || null);
 }
 
 
