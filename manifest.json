@@ -1,0 +1,20 @@
+{
+  "name": "ShoppingBuddy",
+  "short_name": "ShoppingBuddy",
+  "description": "Samen shoppen, samen op pad.",
+  "lang": "nl-BE",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7f7fc",
+  "theme_color": "#6558e8",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
