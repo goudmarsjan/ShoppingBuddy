@@ -1475,6 +1475,26 @@ header {
 
 
 <!-- =========================
+     SHOPPERS / PUBLIC PROFILES
+========================= -->
+<section id="shoppersPage" class="page">
+    <div class="section-header">
+        <div>
+            <h1>Ontdek shoppers 👋</h1>
+            <p class="muted">Bekijk wie er op ShoppingBuddy zit en ontdek hun kledingstijl.</p>
+        </div>
+    </div>
+    <div id="shoppersList" class="grid">
+        <div class="card">Shoppers laden...</div>
+    </div>
+</section>
+
+<section id="publicProfilePage" class="page">
+    <div id="publicProfileContent"></div>
+</section>
+
+
+<!-- =========================
      PROFILE
 ========================= -->
 
@@ -1935,6 +1955,10 @@ function showPage(pageId) {
 
     if (pageId === "requestsPage") {
         renderRequests();
+    }
+
+    if (pageId === "shoppersPage") {
+        loadShoppers();
     }
 
     if (pageId === "profilePage") {
@@ -2767,6 +2791,106 @@ function sendMessage() {
 
 
 /* =====================================================
+   PUBLIC SHOPPER PROFILES
+===================================================== */
+
+async function loadShoppers() {
+    const container = document.getElementById("shoppersList");
+    if (!container) return;
+
+    if (!currentUser) {
+        container.innerHTML = '<div class="card">Log in om profielen te bekijken.</div>';
+        return;
+    }
+
+    container.innerHTML = '<div class="card">Shoppers laden...</div>';
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("profiles")
+            .select("id, username, location, bio")
+            .order("username", { ascending: true });
+
+        if (error) throw error;
+
+        if (!data || !data.length) {
+            container.innerHTML = '<div class="card" style="grid-column:1/-1"><h3>Er zijn nog geen shoppers</h3><p class="muted" style="margin-top:8px">Zodra mensen een account aanmaken, verschijnen hun profielen hier.</p></div>';
+            return;
+        }
+
+        container.innerHTML = data.map(profile => {
+            const username = profile.username || "ShoppingBuddy";
+            const style = profile.bio || "Kledingstijl nog niet ingevuld.";
+            return `
+                <article class="card activity-card" onclick="openPublicProfile('${escapeHTML(profile.id)}')">
+                    <div class="card-top">
+                        <div style="display:flex;gap:12px;align-items:center">
+                            <div class="avatar">${escapeHTML(username.charAt(0).toUpperCase())}</div>
+                            <div>
+                                <strong>${escapeHTML(username)}</strong>
+                                <div class="small muted">📍 ${escapeHTML(profile.location || "Locatie niet ingesteld")}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:15px">
+                        <div class="small" style="font-weight:800;color:var(--primary)">👗 KLEDINGSTIJL</div>
+                        <p class="muted small" style="margin-top:6px;line-height:1.5">${escapeHTML(style)}</p>
+                    </div>
+                    <div class="card-footer"><span class="small" style="color:var(--primary);font-weight:700">Bekijk profiel →</span></div>
+                </article>
+            `;
+        }).join("");
+    } catch (error) {
+        console.error("SHOPPERS LOAD", error);
+        container.innerHTML = `<div class="card" style="grid-column:1/-1"><p>Profielen konden niet worden geladen: ${escapeHTML(error.message || "Onbekende fout")}</p></div>`;
+    }
+}
+
+async function openPublicProfile(userId) {
+    if (!currentUser) {
+        showToast("Log in om profielen te bekijken.", "error");
+        showPage("loginPage");
+        return;
+    }
+
+    const container = document.getElementById("publicProfileContent");
+    showPage("publicProfilePage");
+    container.innerHTML = '<div class="card">Profiel laden...</div>';
+
+    try {
+        const { data: profile, error } = await supabaseClient
+            .from("profiles")
+            .select("id, username, location, bio, created_at")
+            .eq("id", userId)
+            .single();
+
+        if (error) throw error;
+
+        const username = profile.username || "ShoppingBuddy";
+        container.innerHTML = `
+            <div class="card detail-card">
+                <button class="secondary-btn" onclick="showPage('shoppersPage')">← Terug naar shoppers</button>
+                <div class="profile-header" style="margin-top:24px">
+                    <div class="profile-avatar">${escapeHTML(username.charAt(0).toUpperCase())}</div>
+                    <div>
+                        <h1>${escapeHTML(username)}</h1>
+                        <p class="muted">📍 ${escapeHTML(profile.location || "Locatie niet ingesteld")}</p>
+                    </div>
+                </div>
+                <div class="profile-style-card" style="margin-top:18px;padding:20px;border:1px solid var(--border);border-radius:16px;background:#faf9ff">
+                    <div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">👗 Kledingstijl</div>
+                    <p style="margin-top:9px;line-height:1.7;white-space:pre-wrap">${escapeHTML(profile.bio || "Deze gebruiker heeft zijn of haar kledingstijl nog niet beschreven.")}</p>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error("PUBLIC PROFILE", error);
+        container.innerHTML = `<div class="card"><p>Dit profiel kon niet worden geladen.</p><button class="secondary-btn" style="margin-top:15px" onclick="showPage('shoppersPage')">Terug</button></div>`;
+    }
+}
+
+
+/* =====================================================
    PROFILE
 ===================================================== */
 
@@ -3507,6 +3631,13 @@ function updateNavigation() {
                 onclick="showPage('chatPage')"
             >
                 Chat
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showPage('shoppersPage')"
+            >
+                Shoppers
             </button>
 
             <button
