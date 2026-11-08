@@ -1566,6 +1566,10 @@ header {
                 Inloggen
             </button>
 
+            <div class="auth-switch" style="margin-top:14px">
+                <span class="link" onclick="showPage('forgotPasswordPage')">Wachtwoord vergeten?</span>
+            </div>
+
 
             <div class="auth-switch">
 
@@ -1713,6 +1717,39 @@ header {
 
     </div>
 
+</section>
+
+<section id="forgotPasswordPage" class="page">
+    <div class="auth-page">
+        <div class="auth-card">
+            <h1>Wachtwoord vergeten?</h1>
+            <p class="muted">Vul je e-mailadres in. We sturen je een link om een nieuw wachtwoord in te stellen.</p>
+            <div class="form-group">
+                <label for="forgotEmail">E-mailadres</label>
+                <input id="forgotEmail" type="email" autocomplete="email" placeholder="jij@email.be">
+            </div>
+            <button id="forgotPasswordButton" class="primary-btn" onclick="sendPasswordReset()">Verstuur herstelmail</button>
+            <div class="auth-switch"><span class="link" onclick="showPage('loginPage')">Terug naar inloggen</span></div>
+        </div>
+    </div>
+</section>
+
+<section id="resetPasswordPage" class="page">
+    <div class="auth-page">
+        <div class="auth-card">
+            <h1>Kies een nieuw wachtwoord</h1>
+            <p class="muted">Kies een sterk wachtwoord dat je nog niet eerder gebruikte.</p>
+            <div class="form-group">
+                <label for="newPassword">Nieuw wachtwoord</label>
+                <input id="newPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Minstens 8 tekens">
+            </div>
+            <div class="form-group">
+                <label for="confirmNewPassword">Bevestig nieuw wachtwoord</label>
+                <input id="confirmNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="Herhaal je wachtwoord">
+            </div>
+            <button id="saveNewPasswordButton" class="primary-btn" onclick="saveNewPassword()">Wachtwoord opslaan</button>
+        </div>
+    </div>
 </section>
 
 </main>
@@ -3068,6 +3105,7 @@ async function register() {
                 password,
 
                 options: {
+                    emailRedirectTo: window.location.origin + "/",
                     data: {
                         account_type: "PERSON",
                         username: username,
@@ -3193,81 +3231,102 @@ async function register() {
 ===================================================== */
 
 async function login() {
-
-    const email =
-        document.getElementById(
-            "loginEmail"
-        ).value.trim();
-
-    const password =
-        document.getElementById(
-            "loginPassword"
-        ).value;
-
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
 
     if (!email || !password) {
-
-        showToast(
-            "Vul je e-mail en wachtwoord in.",
-            "error"
-        );
-
+        showToast("Vul je e-mailadres en wachtwoord in.", "error");
         return;
     }
 
-
     try {
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.signInWithPassword({
-
-                email,
-
-                password
-
-            });
-
-
-        if (error) {
-            throw error;
-        }
-
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        if (!data.user) throw new Error("Inloggen is niet gelukt. Probeer opnieuw.");
 
         await loadCurrentUser();
+        if (!currentUser) throw new Error("Je profiel kon niet geladen worden. Neem contact op met support.");
 
-
-        showToast(
-            "Welkom terug! 👋",
-            "success"
-        );
-
-
+        showToast("Welkom terug! 👋", "success");
         showPage("homePage");
-
-
     } catch (error) {
-
-        console.error(
-            "LOGIN ERROR:",
-            error
-        );
-
-
-        showToast(
-            error.message ||
-            "Inloggen mislukt.",
-            "error"
-        );
+        console.error("LOGIN ERROR:", error);
+        let message = error?.message || "Inloggen is mislukt.";
+        if (/invalid login credentials/i.test(message)) message = "E-mailadres of wachtwoord is onjuist.";
+        if (/email not confirmed/i.test(message)) message = "Bevestig eerst je e-mailadres via de link in je mailbox.";
+        if (/too many requests/i.test(message)) message = "Te veel pogingen. Wacht even en probeer opnieuw.";
+        showToast(message, "error");
     }
 }
 
 
 /* =====================================================
-   LOGOUT
+   PASSWORD RESET
 ===================================================== */
+
+async function sendPasswordReset() {
+    const email = document.getElementById("forgotEmail").value.trim();
+    const button = document.getElementById("forgotPasswordButton");
+    if (!email) {
+        showToast("Vul je e-mailadres in.", "error");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Herstelmail versturen...";
+    try {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + "/"
+        });
+        if (error) throw error;
+        showToast("Als dit e-mailadres bij een account hoort, ontvang je een herstelmail.", "success");
+    } catch (error) {
+        console.error("PASSWORD RESET REQUEST:", error);
+        showToast(error?.message || "De herstelmail kon niet verstuurd worden. Probeer later opnieuw.", "error");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Verstuur herstelmail";
+    }
+}
+
+async function saveNewPassword() {
+    const password = document.getElementById("newPassword").value;
+    const confirmation = document.getElementById("confirmNewPassword").value;
+    const button = document.getElementById("saveNewPasswordButton");
+
+    if (password.length < 8) {
+        showToast("Kies een wachtwoord van minstens 8 tekens.", "error");
+        return;
+    }
+    if (password !== confirmation) {
+        showToast("De wachtwoorden komen niet overeen.", "error");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Wachtwoord opslaan...";
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) throw new Error("Deze herstel-link is verlopen of al gebruikt. Vraag een nieuwe link aan.");
+
+        const { error } = await supabaseClient.auth.updateUser({ password });
+        if (error) throw error;
+
+        await supabaseClient.auth.signOut();
+        currentUser = null;
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmNewPassword").value = "";
+        showToast("Je wachtwoord is gewijzigd. Je kan nu inloggen.", "success");
+        showPage("loginPage");
+    } catch (error) {
+        console.error("PASSWORD UPDATE:", error);
+        showToast(error?.message || "Wachtwoord wijzigen is niet gelukt.", "error");
+    } finally {
+        button.disabled = false;
+        button.textContent = "Wachtwoord opslaan";
+    }
+}
+
 
 async function logout() {
 
@@ -3517,6 +3576,11 @@ function updateNavigation() {
 
 supabaseClient.auth.onAuthStateChange(
     async (event, session) => {
+
+        if (event === "PASSWORD_RECOVERY") {
+            setTimeout(() => showPage("resetPasswordPage"), 0);
+            return;
+        }
 
         if (session) {
 
