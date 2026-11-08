@@ -1742,72 +1742,12 @@ const supabaseClient =
 
 
 /* =====================================================
-   DEMO DATA
+   LIVE DATA
+   Geen voorbeeldactiviteiten: alleen echte inzendingen
+   mogen later in deze lijst verschijnen.
 ===================================================== */
 
-let activities = [
-
-    {
-        id: 1,
-        location: "Wijnegem Shopping",
-        date: "2026-10-03",
-        time: "14:00",
-        categories: ["Shoppen", "Koffie"],
-        person: "Sarah",
-        age: 24,
-        slots: 2,
-        description:
-            "Ik wil vooral kledingwinkels doen en daarna iets drinken.",
-        rating: "5.0",
-        reliability: 98
-    },
-
-    {
-        id: 2,
-        location: "Gent Zuid",
-        date: "2026-10-03",
-        time: "13:30",
-        categories: ["Shoppen"],
-        person: "Jonas",
-        age: 27,
-        slots: 1,
-        description:
-            "Gewoon gezellig samen shoppen.",
-        rating: "4.8",
-        reliability: 95
-    },
-
-    {
-        id: 3,
-        location: "Aalst",
-        date: "2026-10-04",
-        time: "15:00",
-        categories: ["Koffie"],
-        person: "Emma",
-        age: 25,
-        slots: 2,
-        description:
-            "Samen koffie drinken en wat bijpraten.",
-        rating: "4.9",
-        reliability: 97
-    },
-
-    {
-        id: 4,
-        location: "Aalst Centrum",
-        date: "2026-10-05",
-        time: "18:30",
-        categories: ["Eten"],
-        person: "Lisa",
-        age: 23,
-        slots: 3,
-        description:
-            "Samen iets gaan eten en daarna misschien nog een drankje.",
-        rating: "5.0",
-        reliability: 99
-    }
-
-];
+let activities = [];
 
 
 let events = [
@@ -1823,33 +1763,7 @@ let events = [
 
 let communityEvents = [];
 
-let requests = [
-
-    {
-        id: 1,
-        name: "Lisa",
-        age: 23,
-        location: "Aalst",
-        message: "Lijkt me gezellig!"
-    },
-
-    {
-        id: 2,
-        name: "Emma",
-        age: 25,
-        location: "Dendermonde",
-        message: "Ik zou graag meegaan."
-    },
-
-    {
-        id: 3,
-        name: "Tom",
-        age: 29,
-        location: "Gent",
-        message: "Ik ben zaterdag beschikbaar."
-    }
-
-];
+let requests = [];
 
 
 let currentUser = null;
@@ -2082,11 +1996,9 @@ function renderHomeActivities() {
     const container =
         document.getElementById("homeActivities");
 
-    container.innerHTML =
-        activities
-            .slice(0, 3)
-            .map(activityHTML)
-            .join("");
+    container.innerHTML = activities.length
+        ? activities.slice(0, 3).map(activityHTML).join("")
+        : '<div class="card" style="grid-column:1/-1"><h3>Er zijn nog geen activiteiten</h3><p class="muted" style="margin-top:8px">Maak als eerste een activiteit aan en vind een ShoppingBuddy.</p><button class="primary-btn" style="margin-top:14px" onclick="showPage(\'createPage\')">Activiteit aanmaken</button></div>';
 }
 
 
@@ -2990,103 +2902,9 @@ async function renderProfile() {
             </div>
 
 
-            <div class="stats">
-
-                <div class="stat">
-                    <strong>0</strong>
-                    <span class="muted small">
-                        Georganiseerd
-                    </span>
-                </div>
-
-                <div class="stat">
-                    <strong>0</strong>
-                    <span class="muted small">
-                        Meegedaan
-                    </span>
-                </div>
-
-                <div class="stat">
-                    <strong>Nieuw</strong>
-                    <span class="muted small">
-                        Beoordeling
-                    </span>
-                </div>
-
-                <div class="stat">
-                    <strong>100%</strong>
-                    <span class="muted small">
-                        Betrouwbaarheid
-                    </span>
-                </div>
-
-            </div>
-
             <div class="profile-style-card" style="margin-top:18px;padding:18px;border:1px solid var(--border);border-radius:16px;background:#faf9ff">
                 <div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">👗 Mijn kledingstijl</div>
                 <p style="margin-top:8px;line-height:1.65;white-space:pre-wrap">${escapeHTML(styleDescription)}</p>
-            </div>
-
-        </div>
-
-
-        <div class="section">
-
-            <div class="card">
-
-                <h2>Betrouwbaarheid</h2>
-
-                <p
-                    class="muted"
-                    style="margin-top:6px"
-                >
-                    Je profiel bouwt automatisch
-                    betrouwbaarheid op naarmate je
-                    activiteiten bijwoont.
-                </p>
-
-
-                <div style="margin-top:22px">
-
-                    <div style="display:flex;justify-content:space-between">
-                        <strong>Op tijd</strong>
-                        <span>100%</span>
-                    </div>
-
-                    <div class="progress">
-                        <div style="width:100%"></div>
-                    </div>
-
-                </div>
-
-
-                <div style="margin-top:18px">
-
-                    <div style="display:flex;justify-content:space-between">
-                        <strong>Aanwezigheid</strong>
-                        <span>100%</span>
-                    </div>
-
-                    <div class="progress">
-                        <div style="width:100%"></div>
-                    </div>
-
-                </div>
-
-
-                <div style="margin-top:18px">
-
-                    <div style="display:flex;justify-content:space-between">
-                        <strong>Positieve beoordelingen</strong>
-                        <span>100%</span>
-                    </div>
-
-                    <div class="progress">
-                        <div style="width:100%"></div>
-                    </div>
-
-                </div>
-
             </div>
 
         </div>
