@@ -1510,9 +1510,10 @@ header {
                     id="registerStyle"
                     rows="3"
                     maxlength="500"
+                    required
                     placeholder="Bijvoorbeeld: casual, streetwear, vintage... Vertel wat je graag draagt."
                 ></textarea>
-                <p class="muted small" style="margin-top:6px">Andere shoppers kunnen dit lezen op je profiel. Je kan dit ook later aanpassen.</p>
+                <p class="muted small" style="margin-top:6px">Andere shoppers kunnen dit lezen op je profiel.</p>
 
             </div>
 
@@ -2527,7 +2528,7 @@ function createActivity() {
     ) {
 
         showToast(
-            "Vul alle velden in.",
+            "Vul alle velden in, ook je kledingstijl.",
             "error"
         );
 
@@ -3043,6 +3044,7 @@ async function register() {
         !username ||
         !age ||
         !location ||
+        !styleDescription ||
         !email ||
         !password
     ) {
