@@ -10,7 +10,7 @@ function renderStoreDirectory(){
 async function loadShoppingRoutes(){
  const el=document.getElementById("shoppingRoutesList");if(!el)return;el.innerHTML='<div class="card route-empty">Shoppingroutes laden...</div>';
  try{
-  const {data,error}=await supabaseClient.from("shopping_routes").select("*").gte("route_date",new Date().toISOString().slice(0,10)).order("route_date").order("start_time");
+  const {data,error}=await supabaseClient.from("shopping_routes_with_counts").select("*").gte("route_date",new Date().toISOString().slice(0,10)).order("route_date").order("start_time");
   if(error)throw error;shoppingRoutes=data||[];joinedShoppingRouteIds=new Set();
   if(currentUser){const m=await supabaseClient.from("shopping_route_members").select("route_id").eq("user_id",currentUser.user.id);if(m.error)throw m.error;(m.data||[]).forEach(x=>joinedShoppingRouteIds.add(x.route_id));}
   renderShoppingRoutes();
