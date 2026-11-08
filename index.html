@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#6558e8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ShoppingBuddy">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
 <meta name="description" content="ShoppingBuddy - Samen shoppen, samen op pad.">
 
 <title>ShoppingBuddy</title>
@@ -1499,6 +1504,21 @@ header {
 
             <div class="form-group">
 
+                <label>Jouw kledingstijl</label>
+
+                <textarea
+                    id="registerStyle"
+                    rows="3"
+                    maxlength="500"
+                    placeholder="Bijvoorbeeld: casual, streetwear, vintage... Vertel wat je graag draagt."
+                ></textarea>
+                <p class="muted small" style="margin-top:6px">Andere shoppers kunnen dit lezen op je profiel. Je kan dit ook later aanpassen.</p>
+
+            </div>
+
+
+            <div class="form-group">
+
                 <label>E-mailadres</label>
 
                 <input
@@ -2795,6 +2815,10 @@ async function renderProfile() {
         profile.location ||
         "Nog niet ingesteld";
 
+    const styleDescription =
+        profile.bio ||
+        "Deze gebruiker heeft zijn of haar kledingstijl nog niet beschreven.";
+
 
     container.innerHTML = `
 
@@ -2860,6 +2884,11 @@ async function renderProfile() {
                     </span>
                 </div>
 
+            </div>
+
+            <div class="profile-style-card" style="margin-top:18px;padding:18px;border:1px solid var(--border);border-radius:16px;background:#faf9ff">
+                <div style="font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)">👗 Mijn kledingstijl</div>
+                <p style="margin-top:8px;line-height:1.65;white-space:pre-wrap">${escapeHTML(styleDescription)}</p>
             </div>
 
         </div>
@@ -2994,6 +3023,11 @@ async function register() {
             "registerLocation"
         ).value.trim();
 
+    const styleDescription =
+        document.getElementById(
+            "registerStyle"
+        ).value.trim();
+
     const email =
         document.getElementById(
             "registerEmail"
@@ -3105,7 +3139,9 @@ async function register() {
 
             full_name: username,
 
-            location: location
+            location: location,
+
+            bio: styleDescription
 
         };
 
@@ -3533,6 +3569,12 @@ function updateNavigation() {
     routesButton.textContent = "🛍️ Shopping routes";
     routesButton.onclick = () => showPage("routesPage");
     nav.insertBefore(routesButton, nav.children[2] || null);
+
+    const installButton = document.createElement("button");
+    installButton.className = "nav-btn";
+    installButton.textContent = "⬇️ App installeren";
+    installButton.onclick = installShoppingBuddy;
+    nav.appendChild(installButton);
 }
 
 
@@ -3600,6 +3642,47 @@ async function init() {
 
 
 init();
+
+/* PWA-installatie: Android toont de native installatieprompt.
+   Op iPhone geven we de juiste Safari-stappen. */
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+});
+
+async function installShoppingBuddy() {
+    if (window.matchMedia("(display-mode: standalone)").matches) {
+        showToast("ShoppingBuddy staat al op je startscherm.", "success");
+        return;
+    }
+
+    if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        if (choice && choice.outcome === "accepted") {
+            showToast("ShoppingBuddy wordt geïnstalleerd!", "success");
+        }
+        return;
+    }
+
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (isIOS) {
+        showToast("Tik in Safari op Deel en kies 'Zet op beginscherm'.");
+    } else {
+        showToast("Open ShoppingBuddy in Chrome en kies 'App installeren' of 'Toevoegen aan startscherm'.");
+    }
+}
+
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/sw.js").catch(error => {
+            console.warn("ShoppingBuddy service worker:", error);
+        });
+    });
+}
 
 </script>
 
