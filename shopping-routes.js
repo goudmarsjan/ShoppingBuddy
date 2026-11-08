@@ -1,14 +1,75 @@
-/* ShoppingBuddy: collaborative shopping routes */
-const shoppingStores=[["Zara","Mode","👗"],["H&M","Mode","👕"],["C&A","Mode","🧥"],["Primark","Mode","🛍️"],["Mango","Mode","👚"],["JBC","Mode","👖"],["WE Fashion","Mode","🧢"],["Pull&Bear","Mode","👟"],["MediaMarkt","Elektronica","📱"],["Fnac","Elektronica & boeken","🎧"],["Coolblue","Elektronica","💻"],["Game Mania","Gaming","🎮"],["Kruidvat","Beauty & verzorging","🧴"],["Rituals","Beauty & verzorging","🧼"],["ICI PARIS XL","Beauty & verzorging","💄"],["Douglas","Beauty & verzorging","🌸"],["Hema","Wonen & lifestyle","🕯️"],["Action","Wonen & lifestyle","🏠"],["Flying Tiger","Wonen & lifestyle","🎁"],["Casa","Wonen & lifestyle","🪴"],["IKEA","Wonen & lifestyle","🛋️"],["Decathlon","Sport","🏃"],["JD Sports","Sport & sneakers","👟"],["Foot Locker","Sneakers","👟"],["Torfs","Schoenen","👞"],["Søstrene Grene","Lifestyle","🧺"],["The Body Shop","Beauty","🌿"],["Lush","Beauty","🫧"]].map(([name,category,icon])=>({name,category,icon}));
+/* ShoppingBuddy: city-specific store directory + collaborative routes */
+const cityStoreCatalogue = {
+ "Aalst":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Nieuwstraat 27",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"H&M",category:"Mode",icon:"👕",address:"Nieuwstraat 27–29",url:"https://www.openingsuren.vlaanderen/h-en-m"},
+  {name:"C&A",category:"Mode",icon:"🧥",address:"Nieuwstraat 45/49",url:"https://www.c-and-a.com/stores/be-nl/oost-vlaanderen/aalst/nieuwstraat-45-49.html"},
+  {name:"JBC",category:"Mode",icon:"👖",address:"Nieuwstraat 42/52 · Gentsesteenweg 450",url:"https://www.jbc.be/nl-be/winkels/detail/?location=aalst"}
+ ],
+ "Antwerpen":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Meir 58 · Huidevettersstraat 39",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"H&M",category:"Mode",icon:"👕",address:"Meir 89–97 · Meir 28",url:"https://www.openingsuren.vlaanderen/h-en-m"},
+  {name:"Primark",category:"Mode & lifestyle",icon:"🛍️",address:"Meir 22–30",url:"https://www.primark.com/nl-be/stores/antwerp/meir-22-30"}
+ ],
+ "Brugge":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Steenstraat 29",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"H&M",category:"Mode",icon:"👕",address:"Steenstraat 80 · Zuidzandstraat 46",url:"https://www.openingsuren.vlaanderen/h-en-m"}
+ ],
+ "Gent":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Veldstraat 56",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"H&M",category:"Mode",icon:"👕",address:"Veldstraat 23–27",url:"https://www.openingsuren.vlaanderen/h-en-m"},
+  {name:"Primark",category:"Mode & lifestyle",icon:"🛍️",address:"Langemunt 54",url:"https://www.primark.com/nl-be/stores/ghent/langemunt-54"}
+ ],
+ "Hasselt":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Hoogstraat 17",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"Primark",category:"Mode & lifestyle",icon:"🛍️",address:"Molenstraat 5",url:"https://www.primark.com/nl-be/stores"}
+ ],
+ "Leuven":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Bondgenotenlaan 75–79",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"}
+ ],
+ "Mechelen":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Bruul 67",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"H&M",category:"Mode",icon:"👕",address:"Bruul 42",url:"https://www.openingsuren.vlaanderen/h-en-m"}
+ ],
+ "Brussel":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Nieuwstraat 30 · Nieuwstraat 123",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"},
+  {name:"Primark",category:"Mode & lifestyle",icon:"🛍️",address:"Nieuwstraat 13–15",url:"https://www.primark.com/nl-be/stores"}
+ ],
+ "Sint-Niklaas":[
+  {name:"Zara",category:"Mode",icon:"👗",address:"Kapelstraat 100",url:"https://www.zara.com/be/nl/z-winkels-st1404.html"}
+ ]
+};
 let shoppingRoutes=[];
 let joinedShoppingRouteIds=new Set();
+
+function storesForCity(city){return cityStoreCatalogue[city]||[];}
+
 function renderStoreDirectory(){
- const grid=document.getElementById("shoppingStoresGrid"),choices=document.getElementById("routeStoreChoices");if(!grid||!choices)return;
- grid.innerHTML=shoppingStores.map(s=>`<div class="store-card"><div class="store-logo">${s.icon}</div><div><strong>${escapeHTML(s.name)}</strong><small>${escapeHTML(s.category)}</small></div></div>`).join("");
- choices.innerHTML=shoppingStores.map(s=>`<label class="route-store-choice"><input type="checkbox" name="routeStores" value="${escapeHTML(s.name)}"><span>${s.icon} ${escapeHTML(s.name)}</span></label>`).join("");
+ const grid=document.getElementById("shoppingStoresGrid");
+ const citySelect=document.getElementById("storeDirectoryCity");
+ if(!grid||!citySelect)return;
+ const city=citySelect.value;
+ if(!city){grid.innerHTML='<p class="muted small">Kies een stad om de gevonden winkels en adressen te bekijken.</p>';return;}
+ const stores=storesForCity(city);
+ grid.innerHTML=stores.length?stores.map(s=>`<article class="store-card"><div class="store-logo">${s.icon}</div><div class="store-card-copy"><strong>${escapeHTML(s.name)}</strong><small>${escapeHTML(s.category)}</small><small class="store-address">${escapeHTML(s.address)}</small><a href="${escapeHTML(s.url)}" target="_blank" rel="noopener">Controleer winkel ↗</a></div></article>`).join(""):'<p class="muted small">Er zijn nog geen gecontroleerde winkeladressen voor deze stad toegevoegd.</p>';
 }
+
+function updateCityStores(){
+ const city=document.getElementById("routeCity")?.value||"";
+ const choices=document.getElementById("routeStoreChoices");
+ const help=document.getElementById("routeStoreHelp");
+ const directory=document.getElementById("storeDirectoryCity");
+ if(directory){directory.value=city;renderStoreDirectory();}
+ if(!choices)return;
+ if(!city){choices.innerHTML='<div class="small muted">Kies eerst een stad.</div>';if(help)help.textContent="Kies eerst een stad om de beschikbare winkels te zien.";return;}
+ const stores=storesForCity(city);
+ if(help)help.textContent=stores.length?`Winkels met een gevonden vestiging in ${city}. Vink aan wat je wilt bezoeken.`:`Nog geen gecontroleerde winkels in ${city}.`;
+ choices.innerHTML=stores.length?stores.map(s=>`<label class="route-store-choice" title="${escapeHTML(s.address)}"><input type="checkbox" name="routeStores" value="${escapeHTML(s.name)}"><span>${s.icon} <strong>${escapeHTML(s.name)}</strong><small>${escapeHTML(s.address)}</small></span></label>`).join(""):'<div class="small muted">Geen gecontroleerde winkels beschikbaar voor deze stad.</div>';
+}
+
 async function loadShoppingRoutes(){
- const el=document.getElementById("shoppingRoutesList");if(!el)return;el.innerHTML='<div class="card route-empty">Shoppingroutes laden...</div>';
+ const el=document.getElementById("shoppingRoutesList");if(!el)return;
+ el.innerHTML='<div class="card route-empty">Shoppingroutes laden...</div>';
  try{
   const {data,error}=await supabaseClient.from("shopping_routes_with_counts").select("*").gte("route_date",new Date().toISOString().slice(0,10)).order("route_date").order("start_time");
   if(error)throw error;shoppingRoutes=data||[];joinedShoppingRouteIds=new Set();
@@ -27,16 +88,17 @@ function renderShoppingRoutes(){
 }
 async function createShoppingRoute(){
  if(!currentUser){showToast("Log eerst in om een shoppingroute te maken.","error");showPage("loginPage");return;}
- const title=document.getElementById("routeTitle").value.trim(),city=document.getElementById("routeCity").value.trim(),meeting=document.getElementById("routeMeeting").value.trim(),date=document.getElementById("routeDate").value,time=document.getElementById("routeTime").value,limit=Number(document.getElementById("routeMax").value),description=document.getElementById("routeDescription").value.trim(),stops=[...document.querySelectorAll('input[name="routeStores"]:checked')].map(x=>x.value);
+ const title=document.getElementById("routeTitle").value.trim(),city=document.getElementById("routeCity").value,meeting=document.getElementById("routeMeeting").value.trim(),date=document.getElementById("routeDate").value,time=document.getElementById("routeTime").value,limit=Number(document.getElementById("routeMax").value),description=document.getElementById("routeDescription").value.trim(),stops=[...document.querySelectorAll('input[name="routeStores"]:checked')].map(x=>x.value);
  if(!title||!city||!meeting||!date||!time){showToast("Vul naam, stad, afspreekpunt, datum en startuur in.","error");return;}
  if(date<new Date().toISOString().slice(0,10)){showToast("Kies een datum vanaf vandaag.","error");return;}
+ if(!storesForCity(city).length){showToast("Voor deze stad zijn nog geen gecontroleerde winkels beschikbaar.","error");return;}
  const btn=document.getElementById("createRouteButton");btn.disabled=true;btn.textContent="Route publiceren...";
  try{
   const name=currentUser.profile?.username||currentUser.email?.split("@")[0]||"ShoppingBuddy";
   const {data,error}=await supabaseClient.from("shopping_routes").insert({creator_id:currentUser.user.id,creator_name:name,title,city,meeting_point:meeting,route_date:date,start_time:time,max_participants:limit,description,stops}).select().single();
   if(error)throw error;
   const joined=await supabaseClient.rpc("join_shopping_route",{p_route_id:data.id});if(joined.error)console.warn("Creator auto-join:",joined.error);
-  ["routeTitle","routeCity","routeMeeting","routeDate","routeTime","routeDescription"].forEach(id=>document.getElementById(id).value="");document.querySelectorAll('input[name="routeStores"]').forEach(x=>x.checked=false);document.getElementById("routeMax").value="4";
+  ["routeTitle","routeMeeting","routeDate","routeTime","routeDescription"].forEach(id=>document.getElementById(id).value="");document.getElementById("routeCity").value="";document.querySelectorAll('input[name="routeStores"]').forEach(x=>x.checked=false);document.getElementById("routeMax").value="4";updateCityStores();
   showToast("Je shoppingroute is gepubliceerd! 🎉","success");await loadShoppingRoutes();
  }catch(e){console.error("CREATE ROUTE",e);showToast(e.message||"De route kon niet worden gepubliceerd.","error");}
  finally{btn.disabled=false;btn.textContent="Route publiceren";}
