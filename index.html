@@ -3065,7 +3065,18 @@ async function register() {
 
                 email,
 
-                password
+                password,
+
+                options: {
+                    data: {
+                        account_type: "PERSON",
+                        username: username,
+                        full_name: username,
+                        location: location,
+                        bio: styleDescription,
+                        age: Number(age)
+                    }
+                }
 
             });
 
@@ -3084,52 +3095,12 @@ async function register() {
         }
 
 
-        const profileData = {
-
-            id: data.user.id,
-
-            account_type: "PERSON",
-
-            username: username,
-
-            full_name: username,
-
-            location: location,
-
-            bio: styleDescription
-
-        };
-
-
-        const {
-            error: profileError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .upsert(
-                    profileData,
-                    {
-                        onConflict: "id"
-                    }
-                );
-
-
-        if (profileError) {
-            throw profileError;
-        }
-
-
         /*
-         * Leeftijd tijdelijk lokaal bewaren.
-         *
-         * Later maken we hiervoor een echte
-         * age-kolom in Supabase.
+         * Het database-trigger maakt het profiel veilig aan
+         * op basis van de metadata hierboven. Dit werkt ook
+         * wanneer e-mailbevestiging actief is en er nog geen
+         * gebruikerssessie bestaat.
          */
-
-        localStorage.setItem(
-            "shoppingbuddy_age",
-            age
-        );
 
 
         showToast(
