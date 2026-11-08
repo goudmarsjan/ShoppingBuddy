@@ -1192,16 +1192,16 @@ header {
   <div class="routes-main">
    <div class="section-header"><div><h2>Shopping routes</h2><p class="muted">Ontdek routes van andere ShoppingBuddies of sluit je aan.</p></div><button class="primary-btn" onclick="document.getElementById('routeCreateCard').scrollIntoView({behavior:'smooth'})">＋ Maak een route</button></div>
    <div id="shoppingRoutesList" class="routes-grid"><div class="card route-empty">Shoppingroutes laden...</div></div>
-   <div class="section routes-stores-section"><div class="section-header"><div><h2>Ontdek winkels</h2><p class="muted">Populaire winkels om in je route op te nemen.</p></div></div><div id="shoppingStoresGrid" class="stores-grid"></div></div>
+   <div class="section routes-stores-section"><div class="section-header"><div><h2>Winkels per stad</h2><p class="muted">Kies een stad om alleen winkels met een gevonden vestiging te bekijken.</p></div></div><div class="form-group"><label for="storeDirectoryCity">Stad</label><select id="storeDirectoryCity" onchange="renderStoreDirectory()"><option value="">Selecteer een stad</option><option>Aalst</option><option>Antwerpen</option><option>Brugge</option><option>Gent</option><option>Hasselt</option><option>Leuven</option><option>Mechelen</option><option>Brussel</option><option>Sint-Niklaas</option></select></div><div id="shoppingStoresGrid" class="stores-grid"><p class="muted small">Kies een stad om winkels te bekijken.</p></div></div>
   </div>
   <aside class="card route-create-card" id="routeCreateCard">
    <div class="route-create-heading"><span class="route-create-icon">✦</span><div><h2>Plan een shoppingroute</h2><p class="muted small">Stel je uitstap samen en laat anderen aansluiten.</p></div></div>
    <div class="form-group"><label for="routeTitle">Naam van je route</label><input id="routeTitle" maxlength="70" placeholder="Bijvoorbeeld: Shopnamiddag in Gent"></div>
-   <div class="form-group"><label for="routeCity">Stad of winkelcentrum</label><input id="routeCity" maxlength="100" placeholder="Bijvoorbeeld: Gent centrum"></div>
+   <div class="form-group"><label for="routeCity">1. Kies eerst je stad</label><select id="routeCity" onchange="updateCityStores()"><option value="">Selecteer een stad</option><option>Aalst</option><option>Antwerpen</option><option>Brugge</option><option>Gent</option><option>Hasselt</option><option>Leuven</option><option>Mechelen</option><option>Brussel</option><option>Sint-Niklaas</option></select></div>
    <div class="form-group"><label for="routeMeeting">Afspreekpunt</label><input id="routeMeeting" maxlength="150" placeholder="Bijvoorbeeld: ingang station"></div>
    <div class="route-form-row"><div class="form-group"><label for="routeDate">Datum</label><input id="routeDate" type="date"></div><div class="form-group"><label for="routeTime">Startuur</label><input id="routeTime" type="time"></div></div>
    <div class="form-group"><label for="routeMax">Maximum deelnemers</label><select id="routeMax"><option value="2">2 personen</option><option value="3">3 personen</option><option value="4" selected>4 personen</option><option value="5">5 personen</option><option value="6">6 personen</option><option value="8">8 personen</option><option value="10">10 personen</option><option value="12">12 personen</option></select></div>
-   <div class="form-group"><label>Welke winkels wil je bezoeken?</label><p class="small muted" style="margin-bottom:9px">Selecteer één of meerdere winkels.</p><div id="routeStoreChoices" class="route-store-choices"></div></div>
+   <div class="form-group"><label>2. Duid de winkels aan</label><p id="routeStoreHelp" class="small muted" style="margin-bottom:9px">Kies eerst een stad om de beschikbare winkels te zien.</p><div id="routeStoreChoices" class="route-store-choices"><div class="small muted">Nog geen stad gekozen.</div></div></div>
    <div class="form-group"><label for="routeDescription">Extra info</label><textarea id="routeDescription" rows="3" maxlength="500" placeholder="Wat staat er op de planning?"></textarea></div>
    <button id="createRouteButton" class="primary-btn" style="width:100%;margin-top:20px" onclick="createShoppingRoute()">Route publiceren</button>
    <p class="small muted" style="margin-top:12px;line-height:1.5">Je route wordt zichtbaar voor ingelogde ShoppingBuddies. Gebruik een openbaar afspreekpunt.</p>
@@ -1237,7 +1237,33 @@ header {
 
     </div>
 
+    <div class="events-note">✓ Alleen officiële events met een terugvindbare organisator en bevestigde datum verschijnen hieronder.</div>
     <div id="eventsList" class="grid"></div>
+
+    <div class="section">
+      <div class="section-header"><div><h2>Events van de community</h2><p class="muted">Ingezonden door gebruikers — niet automatisch officieel bevestigd.</p></div></div>
+      <div id="communityEventsList" class="grid"><div class="card">Community-events laden...</div></div>
+    </div>
+
+    <div class="section">
+      <div class="form-card event-submit-card">
+        <h2>Zelf een event toevoegen</h2>
+        <p class="muted" style="margin-top:6px">Deel een event met andere ShoppingBuddies. Je inzending wordt duidelijk als community-event getoond.</p>
+        <div class="form-group"><label for="communityEventTitle">Naam van het event</label><input id="communityEventTitle" maxlength="100" placeholder="Bijvoorbeeld: Vintage markt"></div>
+        <div class="route-form-row">
+          <div class="form-group"><label for="communityEventDate">Datum</label><input id="communityEventDate" type="date"></div>
+          <div class="form-group"><label for="communityEventTime">Uur (optioneel)</label><input id="communityEventTime" type="text" maxlength="40" placeholder="Bijv. 10:00–17:00"></div>
+        </div>
+        <div class="route-form-row">
+          <div class="form-group"><label for="communityEventCity">Stad</label><input id="communityEventCity" maxlength="80" placeholder="Aalst"></div>
+          <div class="form-group"><label for="communityEventPlace">Locatie</label><input id="communityEventPlace" maxlength="140" placeholder="Grote Markt"></div>
+        </div>
+        <div class="form-group"><label for="communityEventOrganizer">Organisator (optioneel)</label><input id="communityEventOrganizer" maxlength="100" placeholder="Naam organisator"></div>
+        <div class="form-group"><label for="communityEventDescription">Beschrijving</label><textarea id="communityEventDescription" rows="3" maxlength="500" placeholder="Wat kunnen bezoekers verwachten?"></textarea></div>
+        <div class="form-group"><label for="communityEventUrl">Link naar meer info (optioneel)</label><input id="communityEventUrl" type="url" maxlength="500" placeholder="https://..."></div>
+        <button id="submitCommunityEventButton" class="primary-btn" style="width:100%;margin-top:18px" onclick="submitCommunityEvent()">Event delen</button>
+      </div>
+    </div>
 
 </section>
 
@@ -1733,51 +1759,17 @@ let activities = [
 
 
 let events = [
-
-    {
-        id: 1,
-        title: "Parkconcert Aalst",
-        date: "2026-10-04",
-        time: "19:30",
-        location: "Stadspark Aalst",
-        organization: "Stad Aalst",
-        type: "Gemeente",
-        icon: "🎵",
-        description:
-            "Een gezellige avond met live muziek in het stadspark.",
-        free: true
-    },
-
-    {
-        id: 2,
-        title: "Herfstmarkt",
-        date: "2026-10-10",
-        time: "10:00",
-        location: "Markt Lede",
-        organization: "Gemeente Lede",
-        type: "Gemeente",
-        icon: "🍂",
-        description:
-            "Lokale markt met standhouders, muziek en activiteiten.",
-        free: true
-    },
-
-    {
-        id: 3,
-        title: "Shopping Night",
-        date: "2026-10-16",
-        time: "18:00",
-        location: "Centrum Dendermonde",
-        organization: "Dendermonde Events",
-        type: "Organisatie",
-        icon: "🛍️",
-        description:
-            "Avondshopping met winkels, animatie en speciale acties.",
-        free: true
-    }
-
+ {id:"aalst-twinkelt-2026",title:"Aalst Twinkelt",date:"2026-12-11",time:"Vanaf 18:30",location:"Centrum Aalst",organization:"Stad Aalst",type:"Officieel bevestigd",icon:"✨",description:"De jaarlijkse sfeervolle shoppingavond in Aalst. Controleer bij je favoriete winkel de eigen openingsuren.",free:true,source_url:"https://aalst.be/cultuur-sport-en-vrije-tijd/evenementen-en-activiteiten/evenementen",source_name:"Stad Aalst"},
+ {id:"aalst-koopzondag-2026-12-13",title:"Koopzondag Aalst",date:"2026-12-13",time:"14:00–18:00",location:"Winkelcentrum Aalst",organization:"Stad Aalst",type:"Officieel bevestigd",icon:"🛍️",description:"Eindejaarskoopzondag. Heel wat winkels in Aalst openen hun deuren; openingsuren kunnen per winkel verschillen.",free:true,source_url:"https://aalst.be/cultuur-sport-en-vrije-tijd/winkelen-en-horeca/koopzondagen-en-braderijen",source_name:"Stad Aalst"},
+ {id:"aalst-koopzondag-2026-12-20",title:"Koopzondag Aalst",date:"2026-12-20",time:"14:00–18:00",location:"Winkelcentrum Aalst",organization:"Stad Aalst",type:"Officieel bevestigd",icon:"🛍️",description:"Eindejaarskoopzondag in Aalst. Controleer de openingsuren van de winkels die je wilt bezoeken.",free:true,source_url:"https://aalst.be/cultuur-sport-en-vrije-tijd/winkelen-en-horeca/koopzondagen-en-braderijen",source_name:"Stad Aalst"},
+ {id:"aalst-koopzondag-2026-12-27",title:"Koopzondag Aalst",date:"2026-12-27",time:"14:00–18:00",location:"Winkelcentrum Aalst",organization:"Stad Aalst",type:"Officieel bevestigd",icon:"🛍️",description:"Extra koopzondag tijdens de eindejaarsperiode in Aalst.",free:true,source_url:"https://aalst.be/cultuur-sport-en-vrije-tijd/winkelen-en-horeca/koopzondagen-en-braderijen",source_name:"Stad Aalst"},
+ {id:"gent-shop-op-zondag-2026-12-06",title:"Shop-op zondag Gent",date:"2026-12-06",time:"Openingsuren verschillen per winkel",location:"Gent centrum",organization:"Stad Gent & PuurGent",type:"Officieel bevestigd",icon:"🛍️",description:"De Gentse winkels in het centrum doen mee aan de maandelijkse Shop-op zondag. Niet alle winkels nemen deel of openen op hetzelfde uur.",free:true,source_url:"https://stad.gent/nl/cultuur-vrije-tijd/nieuws-evenementen/koopzondagen",source_name:"Stad Gent"},
+ {id:"brugge-eindejaar-2026",title:"Eindejaarsshopping Brugge",date:"2026-11-21",time:"Shoppingdagen vanaf 10:00",location:"Steenstraat, Zuidzandstraat en centrum Brugge",organization:"Stad Brugge / Visit Bruges",type:"Officieel bevestigd",icon:"🎄",description:"Officiële shoppingdagen op 21–22 en 28–29 november; 5–6, 12–13 en 19–20 december; 26–27 december 2026 en 2–3 januari 2027. Op 21–22 november loopt het programma vanaf 10:00. Sommige winkels kunnen afwijkende openingsuren hebben.",free:true,source_url:"https://www.visitbruges.be/nl/agenda/evenementenkalender/eindejaarsshopping-2026",source_name:"Visit Bruges"},
+ {id:"mechelen-local-friday-2026",title:"Local Friday Mechelen",date:"2026-11-27",time:"Laatavondshoppen — uren per winkel",location:"Mechelen centrum",organization:"Visit Mechelen",type:"Officieel bevestigd",icon:"🌙",description:"Officiële Local Friday met laatavondshoppen in Mechelen. Controleer de deelnemende winkels en hun openingsuren.",free:true,source_url:"https://www.visitmechelen.be/shoppen/koopzondagen-en-shoppingevents",source_name:"Visit Mechelen"},
+ {id:"mechelen-koopzondag-2026-12-06",title:"Koopzondag Mechelen",date:"2026-12-06",time:"13:00–18:00",location:"Mechelen centrum",organization:"Visit Mechelen",type:"Officieel bevestigd",icon:"🛍️",description:"Maandelijkse koopzondag in Mechelen. De winkels in het centrum zijn doorgaans open van 13 tot 18 uur.",free:true,source_url:"https://www.visitmechelen.be/shoppen/koopzondagen-en-shoppingevents",source_name:"Visit Mechelen"}
 ];
 
+let communityEvents = [];
 
 let requests = [
 
@@ -1917,6 +1909,7 @@ function showPage(pageId) {
 
     if (pageId === "eventsPage") {
         renderEvents();
+        loadCommunityEvents();
     }
 
     if (pageId === "requestsPage") {
@@ -2048,6 +2041,7 @@ function renderHomeEvents() {
 
     container.innerHTML =
         events
+            .filter(event => event.date >= new Date().toISOString().slice(0,10))
             .slice(0, 3)
             .map(eventHTML)
             .join("");
@@ -2358,210 +2352,100 @@ function reportActivity(id) {
 ===================================================== */
 
 function eventHTML(event) {
-
     return `
-
-        <div
-            class="event-card"
-            style="cursor:pointer"
-            onclick="openEvent(${event.id})"
-        >
-
-            <div style="display:flex;justify-content:space-between;gap:15px">
-
-                <div class="event-icon">
-                    ${event.icon}
-                </div>
-
-                <span class="verified">
-                    ✓ ${escapeHTML(event.type)}
-                </span>
-
-            </div>
-
-
-            <h3 style="margin-top:17px">
-                ${escapeHTML(event.title)}
-            </h3>
-
-
-            <p
-                class="muted"
-                style="margin-top:7px"
-            >
-                ${escapeHTML(event.organization)}
-            </p>
-
-
-            <div
-                class="small"
-                style="margin-top:15px;line-height:1.7"
-            >
-                📅 ${formatDate(event.date)}<br>
-                🕐 ${escapeHTML(event.time)}<br>
-                📍 ${escapeHTML(event.location)}
-            </div>
-
-
-            <p style="margin-top:15px;line-height:1.5">
-                ${escapeHTML(event.description)}
-            </p>
-
-
-            <div
-                style="margin-top:15px;color:var(--success);font-weight:700"
-            >
-                ${event.free ? "✓ Gratis" : ""}
-            </div>
-
+      <article class="event-card">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+          <div class="event-icon">${event.icon||"🛍️"}</div>
+          <span class="verified">✓ Officieel bevestigd</span>
         </div>
-
-    `;
+        <h3 style="margin-top:17px">${escapeHTML(event.title)}</h3>
+        <p class="muted" style="margin-top:7px">${escapeHTML(event.organization)}</p>
+        <div class="small" style="margin-top:15px;line-height:1.8">📅 ${formatDate(event.date)}<br>🕐 ${escapeHTML(event.time||"Zie organisator")}<br>📍 ${escapeHTML(event.location)}</div>
+        <p style="margin-top:14px;line-height:1.55">${escapeHTML(event.description)}</p>
+        <a class="event-source-link" href="${escapeHTML(event.source_url)}" target="_blank" rel="noopener">Bron: ${escapeHTML(event.source_name||"Organisator")} ↗</a>
+        <button class="secondary-btn" style="margin-top:14px" onclick="openEvent('${event.id}')">Meer info</button>
+      </article>`;
 }
 
+function communityEventHTML(event) {
+    const date=event.event_date||event.date;
+    return `
+      <article class="event-card community-event-card">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div class="event-icon">👥</div><span class="community-badge">Community-inzending</span></div>
+        <h3 style="margin-top:16px">${escapeHTML(event.title)}</h3>
+        <p class="muted small" style="margin-top:6px">${escapeHTML(event.organizer||"Ingezonden door een gebruiker")}</p>
+        <div class="small" style="margin-top:13px;line-height:1.8">📅 ${formatDate(date)}<br>🕐 ${escapeHTML(event.event_time||event.time||"Niet opgegeven")}<br>📍 ${escapeHTML(event.city||"")} · ${escapeHTML(event.location||"")}</div>
+        <p style="margin-top:12px;line-height:1.5">${escapeHTML(event.description||"")}</p>
+        <p class="small muted" style="margin-top:12px">Niet officieel geverifieerd. Controleer de info bij de organisator.</p>
+        ${event.source_url?'<a class="event-source-link" href="'+escapeHTML(event.source_url)+'" target="_blank" rel="noopener">Meer info ↗</a>':""}
+      </article>`;
+}
 
 function renderEvents() {
-
-    document.getElementById(
-        "eventsList"
-    ).innerHTML =
-        events.map(eventHTML).join("");
+    const today=new Date().toISOString().slice(0,10);
+    const upcoming=events.filter(e=>e.date>=today).sort((a,b)=>a.date.localeCompare(b.date));
+    document.getElementById("eventsList").innerHTML=upcoming.length?upcoming.map(eventHTML).join(""):'<div class="card" style="grid-column:1/-1">Er zijn momenteel geen toekomstige officiële shoppingevents gevonden.</div>';
+    renderHomeEvents();
 }
 
+async function loadCommunityEvents() {
+    const el=document.getElementById("communityEventsList");
+    if(!el)return;
+    try{
+      const {data,error}=await supabaseClient.from("community_events").select("*").gte("event_date",new Date().toISOString().slice(0,10)).order("event_date");
+      if(error)throw error;
+      communityEvents=data||[];
+      el.innerHTML=communityEvents.length?communityEvents.map(communityEventHTML).join(""):'<div class="card" style="grid-column:1/-1;text-align:center"><h3>Nog geen community-events</h3><p class="muted" style="margin-top:7px">Voeg als eerste een event toe.</p></div>';
+    }catch(error){
+      console.error("COMMUNITY EVENTS",error);
+      el.innerHTML='<div class="card" style="grid-column:1/-1">Community-events zijn nog niet geactiveerd. Voer de bijgewerkte SQL in Supabase uit.</div>';
+    }
+}
+
+async function submitCommunityEvent() {
+    if(!currentUser){showToast("Log eerst in om een event toe te voegen.","error");showPage("loginPage");return;}
+    const title=document.getElementById("communityEventTitle").value.trim();
+    const date=document.getElementById("communityEventDate").value;
+    const city=document.getElementById("communityEventCity").value.trim();
+    const location=document.getElementById("communityEventPlace").value.trim();
+    const time=document.getElementById("communityEventTime").value.trim();
+    const organizer=document.getElementById("communityEventOrganizer").value.trim();
+    const description=document.getElementById("communityEventDescription").value.trim();
+    const source=document.getElementById("communityEventUrl").value.trim();
+    if(!title||!date||!city||!location||!description){showToast("Vul minstens naam, datum, stad, locatie en beschrijving in.","error");return;}
+    if(date<new Date().toISOString().slice(0,10)){showToast("Kies een datum vanaf vandaag.","error");return;}
+    if(source&&!/^https?:\/\//i.test(source)){showToast("Gebruik een geldige link die begint met https:// of http://.","error");return;}
+    const button=document.getElementById("submitCommunityEventButton");button.disabled=true;button.textContent="Event toevoegen...";
+    try{
+      const {error}=await supabaseClient.from("community_events").insert({creator_id:currentUser.user.id,title,event_date:date,event_time:time,city,location,organizer,description,source_url:source||null});
+      if(error)throw error;
+      ["communityEventTitle","communityEventDate","communityEventTime","communityEventCity","communityEventPlace","communityEventOrganizer","communityEventDescription","communityEventUrl"].forEach(id=>document.getElementById(id).value="");
+      showToast("Je event is toegevoegd aan de community!","success");await loadCommunityEvents();
+    }catch(error){console.error("SUBMIT COMMUNITY EVENT",error);showToast(error.message||"Event toevoegen is niet gelukt. Controleer de Supabase SQL.","error");}
+    finally{button.disabled=false;button.textContent="Event delen";}
+}
 
 function openEvent(id) {
-
-    const event =
-        events.find(e => e.id === id);
-
-    if (!event) return;
-
-
-    document.getElementById(
-        "eventDetail"
-    ).innerHTML = `
-
-        <div class="card detail-card">
-
-            <button
-                class="secondary-btn"
-                onclick="showPage('eventsPage')"
-            >
-                ← Terug
-            </button>
-
-
-            <div style="font-size:55px;margin-top:25px">
-                ${event.icon}
-            </div>
-
-
-            <h1 class="detail-title">
-                ${escapeHTML(event.title)}
-            </h1>
-
-
-            <span class="verified">
-                ✓ ${escapeHTML(event.type)}
-            </span>
-
-
-            <p
-                style="margin-top:15px;font-weight:700"
-            >
-                ${escapeHTML(event.organization)}
-            </p>
-
-
-            <div class="detail-info">
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Datum
-                    </div>
-
-                    <div class="info-value">
-                        📅 ${formatDate(event.date)}
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Uur
-                    </div>
-
-                    <div class="info-value">
-                        🕐 ${escapeHTML(event.time)}
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Locatie
-                    </div>
-
-                    <div class="info-value">
-                        📍 ${escapeHTML(event.location)}
-                    </div>
-
-                </div>
-
-
-                <div class="info-box">
-
-                    <div class="info-label">
-                        Toegang
-                    </div>
-
-                    <div class="info-value">
-                        ${event.free ? "Gratis" : "Zie event"}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <p
-                style="line-height:1.7;font-size:16px"
-            >
-                ${escapeHTML(event.description)}
-            </p>
-
-
-            <div
-                class="safety"
-                style="margin-top:25px"
-            >
-
-                🏛️
-
-                <strong>
-                    Officieel evenement
-                </strong>
-
-                <div style="margin-top:5px">
-                    Dit event wordt gepubliceerd door
-                    ${escapeHTML(event.organization)}.
-                </div>
-
-            </div>
-
+    const event=events.find(e=>String(e.id)===String(id));
+    if(!event)return;
+    document.getElementById("eventDetail").innerHTML=`
+      <div class="card detail-card">
+        <button class="secondary-btn" onclick="showPage('eventsPage')">← Terug</button>
+        <div style="font-size:55px;margin-top:25px">${event.icon||"🛍️"}</div>
+        <h1 class="detail-title">${escapeHTML(event.title)}</h1>
+        <span class="verified">✓ Officieel bevestigd</span>
+        <p style="margin-top:15px;font-weight:700">${escapeHTML(event.organization)}</p>
+        <div class="detail-info">
+          <div class="info-box"><div class="info-label">Datum</div><div class="info-value">📅 ${formatDate(event.date)}</div></div>
+          <div class="info-box"><div class="info-label">Uur</div><div class="info-value">🕐 ${escapeHTML(event.time||"Zie organisator")}</div></div>
+          <div class="info-box"><div class="info-label">Locatie</div><div class="info-value">📍 ${escapeHTML(event.location)}</div></div>
+          <div class="info-box"><div class="info-label">Toegang</div><div class="info-value">${event.free?"Gratis":"Zie organisator"}</div></div>
         </div>
-
-    `;
-
-
+        <p style="line-height:1.7;font-size:16px">${escapeHTML(event.description)}</p>
+        <div class="safety" style="margin-top:25px">✓ <strong>Officieel bevestigd</strong><div style="margin-top:5px">Bron: ${escapeHTML(event.source_name||event.organization)}.</div><a class="event-source-link" href="${escapeHTML(event.source_url)}" target="_blank" rel="noopener">Bekijk officiële informatie ↗</a></div>
+      </div>`;
     showPage("eventDetailPage");
 }
-
 
 /* =====================================================
    CREATE ACTIVITY
