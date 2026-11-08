@@ -109,3 +109,35 @@ select r.*,
 from public.shopping_routes r;
 
 grant select on public.shopping_routes_with_counts to authenticated;
+
+
+-- Community events submitted by ShoppingBuddy users.
+-- These are deliberately separate from officially confirmed events in the app.
+create table if not exists public.community_events (
+  id uuid primary key default gen_random_uuid(),
+  creator_id uuid not null references auth.users(id) on delete cascade,
+  title text not null check (char_length(title) between 3 and 100),
+  event_date date not null,
+  event_time text not null default '' check (char_length(event_time) <= 40),
+  city text not null check (char_length(city) between 2 and 80),
+  location text not null check (char_length(location) between 2 and 140),
+  organizer text not null default '' check (char_length(organizer) <= 100),
+  description text not null check (char_length(description) between 5 and 500),
+  source_url text null check (source_url is null or source_url ~* '^https?://'),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists community_events_date_idx on public.community_events(event_date);
+alter table public.community_events enable row level security;
+
+drop policy if exists "Anyone can view community events" on public.community_events;
+create policy "Anyone can view community events"
+on public.community_events for select to anon, authenticated using (true);
+
+drop policy if exists "Authenticated users can submit community events" on public.community_events;
+create policy "Authenticated users can submit community events"
+on public.community_events for insert to authenticated
+with check (auth.uid() = creator_id);
+
+grant select on public.community_events to anon, authenticated;
+grant insert on public.community_events to authenticated;
