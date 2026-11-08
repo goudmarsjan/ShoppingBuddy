@@ -1,4 +1,4 @@
-const CACHE_NAME = "shoppingbuddy-shell-v1";
+const CACHE_NAME = "shoppingbuddy-shell-v2";
 const APP_SHELL = ["/", "/index.html", "/shopping-routes.css", "/shopping-routes.js", "/manifest.json", "/icon.svg"];
 
 self.addEventListener("install", event => {
